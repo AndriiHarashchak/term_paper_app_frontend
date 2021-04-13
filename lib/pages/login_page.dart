@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
-import 'package:term_paper_app_frontend/pages/CustomAppBar.dart';
 import 'package:term_paper_app_frontend/pages/employee_page.dart';
 import 'package:term_paper_app_frontend/providers/EmployeeDataReceiver.dart';
 import 'package:flutter_session/flutter_session.dart';
@@ -63,23 +62,26 @@ class _LoginFormState extends State<LoginForm> {
               decoration: InputDecoration(hintText: 'Password'),
             ),
           ),
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith(
-                  (Set<MaterialState> states) {
-                return states.contains(MaterialState.disabled)
-                    ? null
-                    : Colors.white;
-              }),
-              backgroundColor: MaterialStateProperty.resolveWith(
-                  (Set<MaterialState> states) {
-                return states.contains(MaterialState.disabled)
-                    ? null
-                    : Colors.blue;
-              }),
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) {
+                  return states.contains(MaterialState.disabled)
+                      ? null
+                      : Colors.white;
+                }),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (Set<MaterialState> states) {
+                  return states.contains(MaterialState.disabled)
+                      ? null
+                      : Colors.red;
+                }),
+              ),
+              onPressed: _formProgress == 1 ? _login : null,
+              child: Text('Login'),
             ),
-            onPressed: _formProgress == 1 ? _login : null,
-            child: Text('Login'),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
@@ -107,13 +109,6 @@ class _LoginFormState extends State<LoginForm> {
       await FlutterSession().set('employee', response);
       Navigator.of(context)
           .push(new MaterialPageRoute(builder: (context) => EmployeePage()));
-      //TODO push to employee page
-      /*setState(() {
-        errorMessage = response["Name"];
-      });*/
-      //globalVariables.isLoggedIn = true;
-      //globalVariables.currentEmployee = Employee.fromJson(response);
-      //widget.onPressed(RoutesNames.employee, Employee.fromJson(response));
     } else {
       setState(() {
         errorMessage = "Incorrect login or password! try again";

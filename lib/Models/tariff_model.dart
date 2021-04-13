@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:term_paper_app_frontend/Models/UserTariffModel.dart';
 
 class TariffModel {
@@ -8,7 +6,7 @@ class TariffModel {
   double minutesWithinTheOperator;
   double minutesToOtherOperators;
   double internetTrafficSize;
-  double smsCount;
+  int smsCount;
   double smsPrice;
   double callPrice;
   double pricePerPeriod;
@@ -36,15 +34,16 @@ class TariffModel {
     return TariffModel(
       tariffId: jsonData["TariffId"],
       tariffName: jsonData["TariffName"],
-      minutesToOtherOperators: jsonData["MinutesToOtherOperators"],
-      minutesWithinTheOperator: jsonData["MinutesWithinTheOperator"],
-      internetTrafficSize: jsonData["InternetTrafficSize"],
+      minutesToOtherOperators: jsonData["MinutesToOtherOperators"].toDouble(),
+      minutesWithinTheOperator: jsonData["MinutesWithinTheOperator"].toDouble(),
+      internetTrafficSize: jsonData["InternetTrafficSize"].toDouble(),
       smsCount: jsonData["SmsCount"],
-      callPrice: jsonData["CallPrice"],
+      callPrice: jsonData["CallPrice"].toDouble(),
       registrationDate: jsonData["RegistrationDate"],
       regionRef: jsonData["RegionRef"],
-      pricePerPeriod: jsonData["PricePerPeriond"],
+      pricePerPeriod: jsonData["PricePerPeriod"].toDouble(),
       isActive: jsonData["IsActive"],
+      smsPrice: jsonData["SmsPrice"].toDouble(),
       userTariffInfo: UserTariffModel.fromJson(jsonData["UserTariffs"][0]),
     );
   }

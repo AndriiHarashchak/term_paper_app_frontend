@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/pages/employee_page.dart';
+import 'package:term_paper_app_frontend/pages/search_page.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -19,9 +20,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => null));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchPage(title: "Користувача")));
             },
           ),
+          Divider(),
           ListTile(
             title: Text("управління контентом"),
             onTap: () {
@@ -30,6 +34,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   context, MaterialPageRoute(builder: (context) => null));
             },
           ),
+          Divider(),
           ListTile(
             title: Text("Обладнання"),
             onTap: () {
