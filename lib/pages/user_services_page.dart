@@ -1,21 +1,22 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:term_paper_app_frontend/Models/user_promotion_model.dart';
+import 'package:term_paper_app_frontend/Models/user_service_model.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
 
-class UserPromotionsPage extends StatefulWidget {
+class UserServicesPage extends StatefulWidget {
   final int userId;
-  UserPromotionsPage({Key key, @required this.userId}) : super(key: key);
+  UserServicesPage({Key key, @required this.userId}) : super(key: key);
   @override
-  _UserPromotionsPageState createState() => _UserPromotionsPageState();
+  _UserServicesPageState createState() => _UserServicesPageState();
 }
 
-class _UserPromotionsPageState extends State<UserPromotionsPage>
+class _UserServicesPageState extends State<UserServicesPage>
     with TickerProviderStateMixin {
   List<Tab> tabsList = [];
   //TariffModel currentTariff;
-  List<UserPromotionModel> _promotionsHistory;
-  List<UserPromotionModel> _activePromotions;
+  List<UserServiceModel> _promotionsHistory;
+  List<UserServiceModel> _activePromotions;
   bool isDataLoaded = false;
   UserDataProvider _provider;
 
@@ -45,7 +46,7 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
       length: tabsList.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Акції користувача"),
+          title: Text("Послуги користувача"),
           bottom: PreferredSize(
             preferredSize: _tabBar.preferredSize,
             child: ColoredBox(
@@ -60,6 +61,19 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
             return _getPage(e);
           }).toList(),
         ),
+        bottomNavigationBar: BottomAppBar(
+          //color: Colors.transparent,
+          child: SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+              child: ElevatedButton(
+                child: Text("Активувати послугу"),
+                onPressed: () {},
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -68,20 +82,19 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
     switch (tab.text) {
       case "Активні":
         {
-          return getActivePromotionsInfo();
+          return getActiveServicesInfo();
         }
         break;
       case "Історія":
         {
-          return getPromotionsHistory();
+          return getServicesHistory();
         }
         break;
     }
     return Container();
   }
 
-  /*#region Lists*/
-  Widget getActivePromotionsInfo() {
+  Widget getActiveServicesInfo() {
     if (!isDataLoaded) {
       return Center(
         child: CircularProgressIndicator(),
@@ -94,10 +107,10 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
             children: _activePromotions.map<ExpansionPanel>((e) {
               return ExpansionPanel(
                 headerBuilder: (context, isOpen) {
-                  return Text(e.promotionName);
+                  return Text(e.serviceName);
                 },
                 body: Container(
-                  height: 50,
+                  //height: 70,
                   child: Column(
                     children: [
                       Row(
@@ -118,6 +131,39 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
                           ),
                         ],
                       ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 5.0),
+                          child: ElevatedButton(
+                            child: Text("Деактивувати"),
+                            onPressed: () async {
+                              if (await confirm(context,
+                                  title: Text("Відключення послуги"),
+                                  content: Text(
+                                      "Ви впевнені, що хочете деактивувати тариф?"),
+                                  textOK: Text("Деактивувати"),
+                                  textCancel: Text("Скасувати"))) {
+                                bool ok = await _provider.deactivateService(
+                                    widget.userId, e.serviceId);
+                                if (ok) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Успішно деактивовано")));
+                                  loadData();
+                                }
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text("Не вдалось деактивувати")));
+                              }
+                            },
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -134,7 +180,7 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
     );
   }
 
-  Widget getPromotionsHistory() {
+  Widget getServicesHistory() {
     if (!isDataLoaded) {
       return Center(
         child: CircularProgressIndicator(),
@@ -147,7 +193,9 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
             children: _promotionsHistory.map<ExpansionPanel>((e) {
               return ExpansionPanel(
                 headerBuilder: (context, isOpen) {
-                  return Text(e.promotionName);
+                  return Text(e.serviceName != null
+                      ? e.serviceName
+                      : "No decriprion for this promotion");
                 },
                 body: Container(
                   height: 50,
@@ -187,28 +235,27 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
     );
   }
 
-/* #endregion */
   void loadData() async {
-    var activePromotions;
-    var promotionsHistory;
+    //Future.delayed(Duration(seconds: 1));
+    var activeServices;
+    var servicesHistory;
     try {
-      activePromotions = await _provider.getUserPromotions(widget.userId);
+      activeServices = await _provider.getUserServices(widget.userId);
     } catch (e) {
       print(e.toString());
     }
     try {
-      promotionsHistory =
-          await _provider.getUserPromotionsHistory(widget.userId);
+      servicesHistory = await _provider.getUserServicesHistory(widget.userId);
     } catch (e) {
       print(e.toString());
     }
     setState(() {
-      _activePromotions = activePromotions;
+      _activePromotions = activeServices;
       if (_activePromotions != null) {
         _activeIsOpen =
             List.filled(_activePromotions.length, false, growable: true);
       }
-      _promotionsHistory = promotionsHistory;
+      _promotionsHistory = servicesHistory;
       if (_promotionsHistory != null)
         _historyIsOpen =
             List.filled(_promotionsHistory.length, false, growable: true);

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
 import 'package:flutter_session/flutter_session.dart';
+import 'package:term_paper_app_frontend/pages/login_page.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 
 class EmployeePage extends StatefulWidget {
   final Employee employee;
@@ -17,6 +19,24 @@ class _EmployeePageState extends State<EmployeePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Головна сторінка"),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.logout),
+                onPressed: () async {
+                  if (await confirm(context,
+                      title: Text("Вихід з програми"),
+                      content: Text("Ви хочете вийти?"),
+                      textOK: Text("Так"),
+                      textCancel: Text("Скасувати")))
+                    //await FlutterSession().set('employee', null);
+                    //Navigator.of(context).push(
+                    //    MaterialPageRoute(builder: (context) => LoginScreen()));
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        (route) => false);
+                })
+          ],
         ),
         drawer: CustomDrawer(),
         body: FutureBuilder(

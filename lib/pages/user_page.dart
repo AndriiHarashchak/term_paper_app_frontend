@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/userModel.dart';
 import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
+import 'package:term_paper_app_frontend/pages/user_calls_history_page.dart';
+import 'package:term_paper_app_frontend/pages/user_payments_page.dart';
 import 'package:term_paper_app_frontend/pages/user_promotions_page.dart';
+import 'package:term_paper_app_frontend/pages/user_services_page.dart';
+import 'package:term_paper_app_frontend/pages/user_sms_history_page.dart';
 import 'package:term_paper_app_frontend/pages/user_tariffs_page.dart';
 
 class UserPage extends StatefulWidget {
@@ -21,33 +25,83 @@ class _UserPageState extends State<UserPage> {
         title: Text("Інформація про користувача"),
       ),
       drawer: CustomDrawer(),
-      body: Column(
-        children: [
-          Text(widget.user.userId.toString()),
-          Text(widget.user.name),
-          Text(widget.user.surname),
-          ElevatedButton(
-            onPressed: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      UserTariffsPage(userId: widget.user.userId)))
-            },
-            //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-            child: Text("user Tafiffs info"),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: ElevatedButton(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(widget.user.userId.toString()),
+            Text(widget.user.name),
+            Text(widget.user.surname),
+            ElevatedButton(
               onPressed: () => {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        UserPromotionsPage(userId: widget.user.userId)))
+                        UserTariffsPage(userId: widget.user.userId)))
               },
               //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-              child: Text("user promotions info"),
+              child: Text("user Tafiffs info"),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          UserPromotionsPage(userId: widget.user.userId)))
+                },
+                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
+                child: Text("user promotions info"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          UserServicesPage(userId: widget.user.userId)))
+                },
+                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
+                child: Text("user services info"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          UserCallsPage(userId: widget.user.userId)))
+                },
+                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
+                child: Text("user calls history"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          UserSmsPage(userId: widget.user.userId)))
+                },
+                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
+                child: Text("user sms history"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          UserPaymentsPage(userId: widget.user.userId)))
+                },
+                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
+                child: Text("user payments history"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

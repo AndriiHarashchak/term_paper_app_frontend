@@ -21,4 +21,17 @@ class ApiProvider {
       throw Exception("failed to read data");
     }
   }
+
+  Future<dynamic> deleteResponceToAPI(
+      {@required String endpoint, @required Map<String, String> query}) async {
+    Uri uri = Uri.http(_baseUrl, endpoint, query);
+    final response = await http.delete(uri);
+    if (response.statusCode == 200) {
+      if (response.body.isNotEmpty)
+        return json.decode(response.body); // as Map;
+    } else {
+      //print(response.reasonPhrase);
+      throw Exception(response.reasonPhrase);
+    }
+  }
 }

@@ -11,6 +11,7 @@ class FrontendApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'term paper App Ui',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),

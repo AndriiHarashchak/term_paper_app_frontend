@@ -46,41 +46,48 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AnimatedProgressIndicator(value: _formProgress),
-          Text('Login', style: Theme.of(context).textTheme.headline4),
+          //AnimatedProgressIndicator(value: _formProgress),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: Text('Вхід в систему',
+                style: Theme.of(context).textTheme.headline5),
+          ),
           Padding(
             padding: EdgeInsets.all(8.0),
             child: TextFormField(
               controller: _usernameTextController,
-              decoration: InputDecoration(hintText: 'Username'),
+              decoration: InputDecoration(hintText: 'Логін'),
             ),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
             child: TextFormField(
               controller: _passwordTextController,
-              decoration: InputDecoration(hintText: 'Password'),
+              decoration: InputDecoration(hintText: 'Пароль'),
             ),
           ),
           Padding(
             padding: EdgeInsets.all(10.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.resolveWith(
-                    (Set<MaterialState> states) {
-                  return states.contains(MaterialState.disabled)
-                      ? null
-                      : Colors.white;
-                }),
-                backgroundColor: MaterialStateProperty.resolveWith(
-                    (Set<MaterialState> states) {
-                  return states.contains(MaterialState.disabled)
-                      ? null
-                      : Colors.red;
-                }),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.resolveWith(
+                      (Set<MaterialState> states) {
+                    return states.contains(MaterialState.disabled)
+                        ? null
+                        : Colors.white;
+                  }),
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (Set<MaterialState> states) {
+                    return states.contains(MaterialState.disabled)
+                        ? null
+                        : Colors.red;
+                  }),
+                ),
+                onPressed: _formProgress == 1 ? _login : null,
+                child: Text('Вхід'),
               ),
-              onPressed: _formProgress == 1 ? _login : null,
-              child: Text('Login'),
             ),
           ),
           Padding(
@@ -107,8 +114,11 @@ class _LoginFormState extends State<LoginForm> {
         int.parse(_usernameTextController.text), _passwordTextController.text);
     if (response != null) {
       await FlutterSession().set('employee', response);
-      Navigator.of(context)
-          .push(new MaterialPageRoute(builder: (context) => EmployeePage()));
+      //Navigator..pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => EmployeePage()));
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(builder: (context) => EmployeePage()),
+          (route) => false);
     } else {
       setState(() {
         errorMessage = "Incorrect login or password! try again";

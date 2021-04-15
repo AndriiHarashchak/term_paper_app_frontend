@@ -23,35 +23,45 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Text(
-              "Пошук " + widget.title,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            TextFormField(
-              controller: _userIdTextController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Поле не можу бути пустим";
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                  border: UnderlineInputBorder(), labelText: "${widget.title}"),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: checkValueAndNavigate,
-                  child: Text("Пошук"),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                child: Text(
+                  "Пошук " + widget.title.toLowerCase(),
+                  style: Theme.of(context).textTheme.headline5,
                 ),
               ),
-            ),
-            Text(_errorMessage),
-          ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                child: TextFormField(
+                  controller: _userIdTextController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Поле не може бути пустим";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: " id ${widget.title.toLowerCase()}"),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: checkValueAndNavigate,
+                    child: Text("Пошук"),
+                  ),
+                ),
+              ),
+              Text(_errorMessage),
+            ],
+          ),
         ),
       ),
     );
