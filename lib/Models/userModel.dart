@@ -11,6 +11,7 @@ class UserModel {
   String tariffName;
   bool activationState;
   String lastRenewDate;
+  int tariffId;
   UserModel(
       {this.userId,
       this.name,
@@ -23,7 +24,8 @@ class UserModel {
       this.minutesToOtherOperators,
       this.minutesWithinTheOperator,
       this.moneyAmount,
-      this.smsCount});
+      this.smsCount,
+      this.tariffId});
   factory UserModel.fromJson(Map<String, dynamic> jsonData) {
     return UserModel(
         userId: jsonData["UserId"],
@@ -37,6 +39,32 @@ class UserModel {
         minutesToOtherOperators: jsonData["MinutesToOterOperators"],
         minutesWithinTheOperator: jsonData["MinutesWithinTheOperator"],
         smsCount: jsonData["SmsCount"],
-        moneyAmount: jsonData["MoneyAmount"]);
+        moneyAmount: jsonData["MoneyAmount"],
+        tariffId: jsonData["TariffId"]);
+  }
+}
+
+class UserCreationModel {
+  int phoneNumber;
+  String name;
+  String surname;
+  int regionId;
+  int tariffId;
+
+  UserCreationModel(
+      {this.phoneNumber,
+      this.name,
+      this.surname,
+      this.regionId,
+      this.tariffId});
+
+  Map<String, dynamic> toJson() {
+    return {
+      "phoneNumber": phoneNumber,
+      "name": name,
+      "surname": surname,
+      "tariffId": tariffId,
+      "regionId": regionId,
+    };
   }
 }

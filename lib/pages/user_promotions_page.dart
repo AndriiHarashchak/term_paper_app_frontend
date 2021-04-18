@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
+import 'package:term_paper_app_frontend/Models/userModel.dart';
 import 'package:term_paper_app_frontend/Models/user_promotion_model.dart';
+import 'package:term_paper_app_frontend/pages/activation_page.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
 
 class UserPromotionsPage extends StatefulWidget {
-  final int userId;
-  UserPromotionsPage({Key key, @required this.userId}) : super(key: key);
+  final UserModel user;
+  UserPromotionsPage({Key key, @required this.user}) : super(key: key);
   @override
   _UserPromotionsPageState createState() => _UserPromotionsPageState();
 }
@@ -59,6 +61,26 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
           children: tabsList.map((e) {
             return _getPage(e);
           }).toList(),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          //color: Colors.transparent,
+          child: SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+              child: ElevatedButton(
+                child: Text("Активувати послугу"),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ActivationPage(
+                            userId: widget.user.userId,
+                            tariffId: widget.user.tariffId,
+                            type: Type.promotion,
+                          )));
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -192,13 +214,13 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
     var activePromotions;
     var promotionsHistory;
     try {
-      activePromotions = await _provider.getUserPromotions(widget.userId);
+      activePromotions = await _provider.getUserPromotions(widget.user.userId);
     } catch (e) {
       print(e.toString());
     }
     try {
       promotionsHistory =
-          await _provider.getUserPromotionsHistory(widget.userId);
+          await _provider.getUserPromotionsHistory(widget.user.userId);
     } catch (e) {
       print(e.toString());
     }

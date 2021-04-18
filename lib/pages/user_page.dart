@@ -18,6 +18,13 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  TextStyle textStyle;
+  @override
+  void initState() {
+    super.initState();
+    textStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,81 +33,310 @@ class _UserPageState extends State<UserPage> {
       ),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(widget.user.userId.toString()),
-            Text(widget.user.name),
-            Text(widget.user.surname),
-            ElevatedButton(
-              onPressed: () => {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        UserTariffsPage(userId: widget.user.userId)))
-              },
-              //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-              child: Text("user Tafiffs info"),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          UserPromotionsPage(userId: widget.user.userId)))
-                },
-                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-                child: Text("user promotions info"),
+        child: Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.width / 3.0,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Ім'я: ",
+                                  )),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    widget.user.surname,
+                                    style: textStyle,
+                                  )),
+                            ),
+                            Divider(),
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Прізвище: ",
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    widget.user.surname,
+                                    style: textStyle,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: CircleAvatar(
+                          child: Text("Avatar"),
+                          radius: MediaQuery.of(context).size.width / 6,
+                          backgroundColor: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          UserServicesPage(userId: widget.user.userId)))
-                },
-                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-                child: Text("user services info"),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Номер телефону:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.userId.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          UserCallsPage(userId: widget.user.userId)))
-                },
-                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-                child: Text("user calls history"),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Регіон:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.region,
+                          style: textStyle,
+                        ))
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          UserSmsPage(userId: widget.user.userId)))
-                },
-                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-                child: Text("user sms history"),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Тариф:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.tariffName,
+                          style: textStyle,
+                        ))
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          UserPaymentsPage(userId: widget.user.userId)))
-                },
-                //widget.ontapped(RoutesNames.userTariffs, widget.user.userId),
-                child: Text("user payments history"),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Трафік (мб):")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.internetTrafficSize.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
               ),
-            ),
-          ],
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Хвилини в мережі:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.minutesWithinTheOperator.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Хвилин на інші номери:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.minutesToOtherOperators.toString() ?? "0",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Залишок коштів:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.moneyAmount.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Залишок повідомлень:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.smsCount.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Стан пакету послуг:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.activationState == true
+                              ? "пакет послуг активовано"
+                              : "не активовано",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Остання дата активації:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          widget.user.lastRenewDate ?? "",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            UserTariffsPage(userId: widget.user.userId)))
+                  },
+                  child: Text("Інформація про тарифи"),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              UserPromotionsPage(user: widget.user)))
+                    },
+                    child: Text("Акції"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              UserServicesPage(user: widget.user)))
+                    },
+                    child: Text("Послуги"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              UserCallsPage(userId: widget.user.userId)))
+                    },
+                    child: Text("Історія дзвінків"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              UserSmsPage(userId: widget.user.userId)))
+                    },
+                    child: Text("Історія повідомлень"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              UserPaymentsPage(userId: widget.user.userId)))
+                    },
+                    child: Text("Історія платежів"),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

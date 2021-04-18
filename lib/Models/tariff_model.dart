@@ -34,17 +34,23 @@ class TariffModel {
     return TariffModel(
       tariffId: jsonData["TariffId"],
       tariffName: jsonData["TariffName"],
-      minutesToOtherOperators: jsonData["MinutesToOtherOperators"].toDouble(),
-      minutesWithinTheOperator: jsonData["MinutesWithinTheOperator"].toDouble(),
-      internetTrafficSize: jsonData["InternetTrafficSize"].toDouble(),
-      smsCount: jsonData["SmsCount"],
-      callPrice: jsonData["CallPrice"].toDouble(),
+      minutesToOtherOperators: jsonData["MinutesToOtherOperators"] != null
+          ? jsonData["MinutesToOtherOperators"].toDouble()
+          : -1,
+      minutesWithinTheOperator: jsonData["MinutesWithinTheOperator"] != null
+          ? jsonData["MinutesWithinTheOperator"].toDouble()
+          : -1,
+      internetTrafficSize: jsonData["InternetTrafficSize"].toDouble() ?? 0,
+      smsCount: jsonData["SmsCount"] ?? -1,
+      callPrice: jsonData["CallPrice"].toDouble() ?? 0,
       registrationDate: jsonData["RegistrationDate"],
-      regionRef: jsonData["RegionRef"],
-      pricePerPeriod: jsonData["PricePerPeriod"].toDouble(),
+      regionRef: jsonData["RegionRef"] ?? 0,
+      pricePerPeriod: jsonData["PricePerPeriod"].toDouble() ?? 0,
       isActive: jsonData["IsActive"],
       smsPrice: jsonData["SmsPrice"].toDouble(),
-      userTariffInfo: UserTariffModel.fromJson(jsonData["UserTariffs"][0]),
+      userTariffInfo: jsonData["UserTariffs"].length > 0
+          ? UserTariffModel.fromJson(jsonData["UserTariffs"][0])
+          : null,
     );
   }
 }

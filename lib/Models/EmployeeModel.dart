@@ -45,6 +45,11 @@ class Employee {
     data["Salary"] = salary;
     data["PostRef"] = postRef;
     data["OfficeRef"] = officeRef;
+    data["EmployeeId"] = id;
+    data["Salary"] = salary;
+    data["PostName"] = postName;
+    data["HiringDate"] = hiringDate;
+    data["OfficeAdress"] = officeAdress;
     return data;
   }
 }

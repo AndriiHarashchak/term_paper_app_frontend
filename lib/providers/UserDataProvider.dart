@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:term_paper_app_frontend/Models/UserTariffModel.dart';
 import 'package:term_paper_app_frontend/Models/payment_model.dart';
+import 'package:term_paper_app_frontend/Models/promotion_model.dart';
+import 'package:term_paper_app_frontend/Models/service_model.dart';
 import 'package:term_paper_app_frontend/Models/tariff_model.dart';
 import 'package:term_paper_app_frontend/Models/userModel.dart';
 import 'package:term_paper_app_frontend/Models/user_call_model.dart';
@@ -187,5 +191,80 @@ class UserDataProvider {
       print(e.toString());
       return false;
     }
+  }
+
+  Future<List<ServiceModel>> getServices(int tariffId) async {
+    Map<String, String> params = {"tariffId": tariffId.toString()};
+    try {
+      var response = await _provider.getDataFromAPI(
+          endpoint: "api/basedata/services", query: params);
+      if (response == null) return null;
+      List<ServiceModel> services = [];
+      (response as List).forEach((element) {
+        services.add(ServiceModel.fromJson(element));
+      });
+      return services;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<bool> activateService(int userId, int serviceId) async {
+    Map<String, String> params = {
+      "userId": userId.toString(),
+      "serviceId": serviceId.toString()
+    };
+    try {
+      await _provider.putResponseToAPI(
+          endpoint: "api/user/services", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<List<PromotionModel>> getPromotions() async {
+    try {
+      var response = await _provider.getDataFromAPI(
+          endpoint: "api/basedata/promotions", query: null);
+      if (response == null) return null;
+      List<PromotionModel> promotions = [];
+      (response as List).forEach((element) {
+        promotions.add(PromotionModel.fromJson(element));
+      });
+      return promotions;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<bool> activatePromotion(int userId, int promotionId) async {
+    Map<String, String> params = {
+      "userId": userId.toString(),
+      "promotionId": promotionId.toString()
+    };
+    try {
+      await _provider.putResponseToAPI(
+          endpoint: "api/user/promotions", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<UserModel> registerUser(UserCreationModel newUser) async {
+    try {
+      var requestBody = json.encode(newUser.toJson());
+      var response =
+          await _provider.postRequest(endpoint: "api/user", body: requestBody);
+      return UserModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
   }
 }

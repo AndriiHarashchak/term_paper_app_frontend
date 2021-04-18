@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
+import 'package:term_paper_app_frontend/pages/basedata_navigation_page.dart';
 import 'package:term_paper_app_frontend/pages/employee_page.dart';
-import 'package:term_paper_app_frontend/pages/search_page.dart';
+import 'package:term_paper_app_frontend/pages/employye_and_equipment_navigation_page.dart';
+import 'package:term_paper_app_frontend/pages/user_navigation_page.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -11,51 +14,62 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: new ListView(
-        children: [
-          _getGeader(),
-          ListTile(
-            title: Text("Користувачі"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SearchPage(title: "Користувача")));
-            },
-          ),
-          Divider(),
-          ListTile(
-            title: Text("управління контентом"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => null));
-            },
-          ),
-          Divider(),
-          ListTile(
-            title: Text("Обладнання"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => null));
-            },
-          )
-        ],
-      ),
-    );
+    return FutureBuilder(
+        future: FlutterSession().get('employee'),
+        builder: (context, snapshot) {
+          return Drawer(
+            child: new ListView(
+              children: [
+                _getGeader(
+                    snapshot.hasData ? Employee.fromJson(snapshot.data) : null),
+                ListTile(
+                  title: Text("Користувачі"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Usernavigationpage()));
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: Text("Тарифи та послуги"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BasedataNavigationPage()));
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: Text("Працівники та обладнання"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EmployeeNavigationPage()));
+                  },
+                ),
+                Divider(),
+              ],
+            ),
+          );
+        });
+    ;
   }
 
-  Widget _getGeader() {
+  Widget _getGeader(Employee employee) {
     return UserAccountsDrawerHeader(
-      accountName: Text("Ashish Rawat"),
-      accountEmail: Text("ashishrawat2911@gmail.com"),
+      accountName: employee != null ? Text(employee.id.toString()) : Text("id"),
+      accountEmail: employee != null
+          ? Text(employee.name + employee.surname)
+          : Text("employee name and surname"),
       currentAccountPicture: CircleAvatar(
-        backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
-            ? Colors.blue
-            : Colors.white,
+        backgroundColor: Colors.white,
         child: Text(
           "A",
           style: TextStyle(fontSize: 40.0),
@@ -67,7 +81,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
             context,
             MaterialPageRoute(
                 builder: (context) => EmployeePage(
-                      employee: Employee(),
+                      employee: employee,
+                      isLoggedIn: true,
                     )));
       },
     );

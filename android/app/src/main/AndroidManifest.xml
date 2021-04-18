@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.term_paper_app_frontend"
     >
+
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="term_paper_app_frontend"
         android:icon="@mipmap/ic_launcher"
