@@ -31,4 +31,12 @@ class ServiceModel {
       registrationDate: jsonData["RegistationTime"],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      "serviceName": serviceName,
+      "conditions": conditions,
+      "price": price,
+      "activePeriod": activePeriod,
+    };
+  }
 }

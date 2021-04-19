@@ -28,4 +28,12 @@ class PromotionModel {
         activePeriod: jsonData["ActivePeriod"] ?? -1,
         registrationDate: jsonData["RegistationTime"]);
   }
+  Map<String, dynamic> toJson() {
+    return {
+      "promotionName": promotionName,
+      "conditions": conditions,
+      "description": description,
+      "activePeriod": activePeriod
+    };
+  }
 }

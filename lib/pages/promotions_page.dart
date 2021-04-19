@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/promotion_model.dart';
+import 'package:term_paper_app_frontend/pages/promotion_create_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class PromotionsPage extends StatefulWidget {
@@ -69,12 +70,8 @@ class _PromotionsPageState extends State<PromotionsPage> {
                   child: ElevatedButton(
                     child: Text("Створити акцію"),
                     onPressed: () {
-                      /* Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ActivationPage(
-                            userId: widget.user.userId,
-                            tariffId: widget.user.tariffId,
-                            type: Type.service,
-                          ))); */
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PromotionRegisterPage()));
                     },
                   ),
                 ),
@@ -203,8 +200,26 @@ class _PromotionsPageState extends State<PromotionsPage> {
                                         horizontal: 15.0, vertical: 1.0),
                                     child: TextButton(
                                       child: Text("Деактивувати акцію"),
-                                      onPressed: () {
-                                        //TODO implement
+                                      onPressed: () async {
+                                        bool ok =
+                                            await _provider.deactivatePromotion(
+                                                promotion.promotionId);
+                                        if (ok) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                  content: Text(
+                                                      "Успішно деактивовано")));
+                                          loadData();
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                  content: Text(
+                                                      "Не вдалось деактивувати")));
+                                        }
                                       },
                                     ),
                                   ),
@@ -218,9 +233,7 @@ class _PromotionsPageState extends State<PromotionsPage> {
                                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                                 child: TextButton(
                                   child: Text("Активувати акцію"),
-                                  onPressed: () {
-                                    //TODO implement
-                                  },
+                                  onPressed: () {},
                                 ),
                               ),
                             );

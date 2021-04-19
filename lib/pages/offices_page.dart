@@ -67,7 +67,7 @@ class _OfficesPageState extends State<OfficesPage> {
                   padding:
                       EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                   child: ElevatedButton(
-                    child: Text("Створити послугу"),
+                    child: Text("Зареєструвати офіс"),
                     onPressed: () {
                       /* Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ActivationPage(
@@ -164,7 +164,8 @@ class _OfficesPageState extends State<OfficesPage> {
                                 Expanded(
                                     flex: 2, child: Text("Дата закритття:")),
                                 Expanded(
-                                    flex: 3, child: Text(office.closingDate)),
+                                    flex: 3,
+                                    child: Text(office.closingDate ?? "")),
                               ],
                             ),
                           ),
@@ -177,14 +178,30 @@ class _OfficesPageState extends State<OfficesPage> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.0, vertical: 1.0),
                                 child: TextButton(
-                                  child: Text("Закрити офіс"),
-                                  onPressed: () {
-                                    //TODO implement
+                                  child: Text("Видалити офіс з доступних"),
+                                  onPressed: () async {
+                                    bool ok = await _provider
+                                        .deactivateOffice(office.officeId);
+                                    if (ok) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.redAccent,
+                                              content:
+                                                  Text("Успішно видалено")));
+                                      loadData();
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.redAccent,
+                                              content:
+                                                  Text("Не вдалось видалили")));
+                                    }
                                   },
                                 ),
                               ),
                             );
                           }
+                          return Container();
                         }(),
                       ],
                     )

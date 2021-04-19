@@ -59,7 +59,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
           );
         });
-    ;
   }
 
   Widget _getGeader(Employee employee) {

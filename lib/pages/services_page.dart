@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/service_model.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class ServicesPage extends StatefulWidget {
@@ -69,12 +70,8 @@ class _ServicesPageState extends State<ServicesPage> {
                   child: ElevatedButton(
                     child: Text("Створити послугу"),
                     onPressed: () {
-                      /* Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ActivationPage(
-                            userId: widget.user.userId,
-                            tariffId: widget.user.tariffId,
-                            type: Type.service,
-                          ))); */
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ServiceRegistrationDage()));
                     },
                   ),
                 ),
@@ -204,8 +201,26 @@ class _ServicesPageState extends State<ServicesPage> {
                                         horizontal: 15.0, vertical: 1.0),
                                     child: TextButton(
                                       child: Text("Деактивувати послугу"),
-                                      onPressed: () {
-                                        //TODO implement
+                                      onPressed: () async {
+                                        bool ok =
+                                            await _provider.deactivateService(
+                                                service.serviceId);
+                                        if (ok) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                  content: Text(
+                                                      "Успішно деактивовано")));
+                                          loadData();
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                  content: Text(
+                                                      "Не вдалось деактивувати")));
+                                        }
                                       },
                                     ),
                                   ),

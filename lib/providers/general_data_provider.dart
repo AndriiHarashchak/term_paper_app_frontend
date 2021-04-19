@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:term_paper_app_frontend/Models/office_model.dart';
 import 'package:term_paper_app_frontend/Models/promotion_model.dart';
 import 'package:term_paper_app_frontend/Models/region_model.dart';
@@ -143,5 +145,72 @@ class GeneralDataProvider {
       print(e.toString());
       return null;
     }
+  }
+
+  Future<bool> deactivateOffice(int officeId) async {
+    Map<String, String> params = {
+      "officeId": officeId.toString(),
+      //"serviceId": serviceId.toString()
+    };
+    try {
+      await _provider.deleteResponceToAPI(
+          endpoint: "api/employee/offices", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deactivatePromotion(int promotionId) async {
+    Map<String, String> params = {
+      "promotionId": promotionId.toString(),
+    };
+    try {
+      await _provider.deleteResponceToAPI(
+          endpoint: "api/basedata/promotions", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deactivateService(int serviceId) async {
+    Map<String, String> params = {
+      "serviceId": serviceId.toString(),
+    };
+    try {
+      await _provider.deleteResponceToAPI(
+          endpoint: "api/basedata/services", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<PromotionModel> registerPromotion(PromotionModel promotion) async {
+    try {
+      var requestBody = json.encode(promotion.toJson());
+      var response = await _provider.postRequest(
+          endpoint: "api/basedata/promotions", body: requestBody);
+      return PromotionModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<ServiceModel> registerService(ServiceModel service) async {
+    try {
+      var requestBody = json.encode(service.toJson());
+      var response = await _provider.postRequest(
+          endpoint: "api/basedata/services", body: requestBody);
+      return ServiceModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
   }
 }

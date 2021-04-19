@@ -4,8 +4,6 @@ import 'package:term_paper_app_frontend/pages/promotions_page.dart';
 import 'package:term_paper_app_frontend/pages/services_page.dart';
 import 'package:term_paper_app_frontend/pages/tariffs_page.dart';
 
-import 'search_page.dart';
-
 class BasedataNavigationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
