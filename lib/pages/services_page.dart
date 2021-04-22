@@ -71,7 +71,9 @@ class _ServicesPageState extends State<ServicesPage> {
                     child: Text("Створити послугу"),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ServiceRegistrationDage()));
+                          builder: (context) => ServiceRegistrationPage(
+                                type: OperationType.create,
+                              )));
                     },
                   ),
                 ),
@@ -189,7 +191,13 @@ class _ServicesPageState extends State<ServicesPage> {
                                     child: ElevatedButton(
                                       child: Text("Редагувати послугу"),
                                       onPressed: () {
-                                        //TODO implement
+                                        Navigator.of(context).push(
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ServiceRegistrationPage(
+                                                        service: service,
+                                                        type: OperationType
+                                                            .update)));
                                       },
                                     ),
                                   ),

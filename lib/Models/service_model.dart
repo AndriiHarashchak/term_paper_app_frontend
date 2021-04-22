@@ -33,6 +33,7 @@ class ServiceModel {
   }
   Map<String, dynamic> toJson() {
     return {
+      "ServiceId": serviceId,
       "serviceName": serviceName,
       "conditions": conditions,
       "price": price,

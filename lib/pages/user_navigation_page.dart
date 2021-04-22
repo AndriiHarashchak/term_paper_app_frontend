@@ -29,6 +29,7 @@ class _UsernavigationpageState extends State<Usernavigationpage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => SearchPage(
+                              type: SearchType.user,
                               title: "Пошук користувача",
                             )),
                   );

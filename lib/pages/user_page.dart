@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/userModel.dart';
 import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
+import 'package:term_paper_app_frontend/pages/edit_user_page.dart';
 import 'package:term_paper_app_frontend/pages/user_calls_history_page.dart';
 import 'package:term_paper_app_frontend/pages/user_payments_page.dart';
 import 'package:term_paper_app_frontend/pages/user_promotions_page.dart';
 import 'package:term_paper_app_frontend/pages/user_services_page.dart';
 import 'package:term_paper_app_frontend/pages/user_sms_history_page.dart';
 import 'package:term_paper_app_frontend/pages/user_tariffs_page.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class UserPage extends StatefulWidget {
   final UserModel user;
@@ -27,9 +29,21 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    double containerHeight = 0.0;
+    if (kIsWeb) {
+      containerHeight = MediaQuery.of(context).size.width / 6;
+    } else {
+      containerHeight = MediaQuery.of(context).size.width / 3.0;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Інформація про користувача"),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => EditUserPage(user: widget.user)))),
+        ],
       ),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
@@ -38,7 +52,7 @@ class _UserPageState extends State<UserPage> {
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.width / 3.0,
+                height: containerHeight,
                 child: Row(
                   children: [
                     Expanded(
@@ -93,7 +107,7 @@ class _UserPageState extends State<UserPage> {
                         padding: EdgeInsets.all(10),
                         child: CircleAvatar(
                           child: Text("Avatar"),
-                          radius: MediaQuery.of(context).size.width / 6,
+                          radius: containerHeight / 2,
                           backgroundColor: Colors.red,
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/tariff_model.dart';
+import 'package:term_paper_app_frontend/pages/tariff_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class TariffsPage extends StatefulWidget {
@@ -128,9 +129,10 @@ class _TariffsPageState extends State<TariffsPage> {
                   title: Text(tariff.tariffName),
                   trailing: Icon(Icons.arrow_right),
                   onTap: () {
-                    /* Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PromotionsPage()),
-                  ); */
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => TariffPage(tariff: tariff)),
+                    );
                   },
                 );
               }),

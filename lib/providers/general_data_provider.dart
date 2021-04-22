@@ -213,4 +213,16 @@ class GeneralDataProvider {
     }
     return null;
   }
+
+  Future<ServiceModel> updateService(ServiceModel updatedService) async {
+    try {
+      var requestBody = json.encode(updatedService.toJson());
+      var response = await _provider.putResponseToAPI(
+          endpoint: "api/basedata/services", query: null, body: requestBody);
+      return ServiceModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
 }

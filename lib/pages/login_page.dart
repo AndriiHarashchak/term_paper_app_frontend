@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/pages/employee_page.dart';
-import 'package:term_paper_app_frontend/providers/EmployeeDataReceiver.dart';
+import 'package:term_paper_app_frontend/providers/employee_data_provider.dart';
 import 'package:flutter_session/flutter_session.dart';
 
 class LoginScreen extends StatelessWidget {
-  //final Function(String, dynamic) onTapped;
-  //LoginScreen({@required this.onTapped});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +25,6 @@ class LoginScreen extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  //final Function(String, dynamic) onPressed;
-  //LoginForm({@required this.onPressed});
-
   @override
   _LoginFormState createState() => _LoginFormState();
 }
@@ -106,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
     if (!_usernameTextController.value.text.isNotEmpty ||
         !_passwordTextController.value.text.isNotEmpty) {
       setState(() {
-        errorMessage = "login and password can`t be zero";
+        errorMessage = "Поля логіну та паролю не можуть бути пустими";
       });
       return;
     }
@@ -125,7 +120,7 @@ class _LoginFormState extends State<LoginForm> {
           (route) => false);
     } else {
       setState(() {
-        errorMessage = "Incorrect login or password! try again";
+        errorMessage = "Неправильний логін або пароль! Спробуйте ще раз";
       });
       //show error message
     }

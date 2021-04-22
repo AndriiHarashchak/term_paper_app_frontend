@@ -1,29 +1,34 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:term_paper_app_frontend/Models/promotion_model.dart';
 import 'package:term_paper_app_frontend/Models/region_model.dart';
 import 'package:term_paper_app_frontend/Models/service_model.dart';
 import 'package:term_paper_app_frontend/pages/services_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
-class ServiceRegistrationDage extends StatefulWidget {
+enum OperationType { create, update }
+
+class ServiceRegistrationPage extends StatefulWidget {
+  final OperationType type;
+  final ServiceModel service;
+  ServiceRegistrationPage({Key key, @required this.type, this.service})
+      : super(key: key);
   @override
-  _ServiceRegistrationDageState createState() =>
-      _ServiceRegistrationDageState();
+  _ServiceRegistrationPageState createState() =>
+      _ServiceRegistrationPageState();
 }
 
-class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
+class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  final _conditionsTextController = new TextEditingController();
+  //final _conditionsTextController = new TextEditingController();
   String conditions;
-  final _serviceNameTextController = new TextEditingController();
+  //final _serviceNameTextController = new TextEditingController();
   String _serviceName;
 
-  final _priceTextController = new TextEditingController();
+  //final _priceTextController = new TextEditingController();
   String _price;
 
-  final _activePeriodTextController = new TextEditingController();
+  //final _activePeriodTextController = new TextEditingController();
   String _activePeriod;
 
   List<RegionModel> regions;
@@ -31,6 +36,13 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
   @override
   void initState() {
     super.initState();
+    if (widget.type == OperationType.update) {
+      conditions = widget.service.conditions;
+      _serviceName = widget.service.serviceName;
+      _price = widget.service.price.toString();
+      _activePeriod = widget.service.activePeriod.toString();
+    }
+
     _gdprovider = GeneralDataProvider();
   }
 
@@ -38,7 +50,9 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Створення послуги"),
+        title: Text(widget.type == OperationType.create
+            ? "Створення послуги"
+            : "Редагування послуги"),
       ),
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -52,10 +66,13 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
             onWillPop: () async {
               return await confirm(context,
                   title: Text("Скасування"),
-                  textOK: Text("Відмінити створення"),
+                  textOK: Text(widget.type == OperationType.create
+                      ? "Відмінити створення"
+                      : "Відмінити редагування"),
                   textCancel: Text("Залишитись"),
-                  content: Text(
-                      "Ви впевнені, що хочете скаcувати створення нової послуги?")); //true if can be popped
+                  content: Text(widget.type == OperationType.create
+                      ? "Ви впевнені, що хочете скаcувати створення нової послуги?"
+                      : "Ви впевнені, що хочете скаcувати редагування послуги?")); //true if can be popped
             },
             child: Card(
               child: Column(
@@ -68,7 +85,9 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
                       decoration: InputDecoration(
                           labelText: "Назва послуги",
                           hintText: "Введіть назву послуги"),
-                      controller: _serviceNameTextController,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : widget.service.serviceName,
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
                         _serviceName = value;
@@ -90,7 +109,9 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
                       decoration: InputDecoration(
                           labelText: "Умови",
                           hintText: "Введіть умови послуги"),
-                      controller: _conditionsTextController,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : widget.service.conditions,
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
                         conditions = value;
@@ -105,7 +126,9 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
                       autocorrect: false,
                       decoration: InputDecoration(
                           labelText: "Ціна", hintText: "Введіть ціну"),
-                      controller: _priceTextController,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : widget.service.price.toString(),
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         _price = value;
@@ -132,7 +155,9 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
                       decoration: InputDecoration(
                           labelText: "Активний період (діб)",
                           hintText: "Введіть термін дії послуги"),
-                      controller: _activePeriodTextController,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : widget.service.activePeriod.toString(),
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         _activePeriod = value;
@@ -154,30 +179,45 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: Text("Створити послугу"),
+                        child: Text(widget.type == OperationType.create
+                            ? "Створити послугу"
+                            : "Редагувати послугу"),
                         onPressed: () async {
+                          String title = widget.type == OperationType.create
+                              ? "Зареєструвати"
+                              : "Редагувати";
                           if (!await confirm(
                             context,
-                            textOK: Text("Зареєструвати"),
+                            textOK: Text(title),
                             textCancel: Text("Скасувати"),
-                            title: Text("Створення псолуги"),
+                            title: Text(widget.type == OperationType.create
+                                ? "Реєстрація послуги"
+                                : "Редагування послуги"),
                             content: Text(
-                                "Ви впевнені, що хочете створити послугу?"),
+                                "Ви впевнені, що хочете ${title.toLowerCase()} послугу?"),
                           )) {
                             return;
                           }
-                          ServiceModel newService = await registerService();
+                          ServiceModel newService =
+                              widget.type == OperationType.create
+                                  ? await registerService()
+                                  : await editService();
                           if (newService != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.redAccent,
-                                content: Text("Успішно створено")));
+                                content: Text(
+                                    widget.type == OperationType.create
+                                        ? "Успішно створено"
+                                        : "Успішно редаговано")));
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => ServicesPage()));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
-                              content: Text("Не вдалось створити послугу"),
+                              content: Text(widget.type == OperationType.create
+                                  ? "Не вдалось створити послугу"
+                                  : "Не вдалось редагувати послугу"),
                             ));
                           }
                         },
@@ -211,5 +251,17 @@ class _ServiceRegistrationDageState extends State<ServiceRegistrationDage> {
   String validate(String text) {
     if (text.isNotEmpty && text.length > 2) return null;
     return "Поле не може бути пустим";
+  }
+
+  Future<ServiceModel> editService() async {
+    final FormState form = _formKey.currentState;
+    if (!form.validate()) return null;
+    ServiceModel newService = ServiceModel(
+        serviceId: widget.service.serviceId,
+        serviceName: _serviceName,
+        conditions: conditions,
+        price: double.parse(_price),
+        activePeriod: int.parse(_activePeriod));
+    return await _gdprovider.updateService(newService);
   }
 }

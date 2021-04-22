@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/Models/userModel.dart';
+import 'package:term_paper_app_frontend/pages/employee_page.dart';
 import 'package:term_paper_app_frontend/pages/user_page.dart';
+import 'package:term_paper_app_frontend/providers/employee_data_provider.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
+
+enum SearchType { user, employee }
 
 class SearchPage extends StatefulWidget {
   final String title;
+  final SearchType type;
   //final Function(String, dynamic) onTapped;
-  SearchPage({Key key, @required this.title}) : super(key: key);
+  SearchPage({Key key, @required this.title, @required this.type})
+      : super(key: key);
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -19,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Пошук абонента"),
+        title: Text("Пошук " + widget.title.toLowerCase()),
       ),
       body: Form(
         key: _formKey,
@@ -38,6 +45,7 @@ class _SearchPageState extends State<SearchPage> {
                 padding: EdgeInsets.symmetric(horizontal: 5.0),
                 child: TextFormField(
                   controller: _userIdTextController,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Поле не може бути пустим";
@@ -69,20 +77,31 @@ class _SearchPageState extends State<SearchPage> {
 
   checkValueAndNavigate() async {
     if (_formKey.currentState.validate()) {
-      UserModel response = await UserDataProvider()
-          .getUserInfo(int.parse(_userIdTextController.value.text));
-      if (response != null) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => UserPage(user: response)));
-        /* setState(() {
-          _errorMessage = "Navigation will be there ${response.toString()}";
-        }); */
-        print(response);
-        //widget.onTapped(RoutesNames.user, response);
+      if (widget.type == SearchType.user) {
+        UserModel response = await UserDataProvider()
+            .getUserInfo(int.parse(_userIdTextController.value.text));
+        if (response != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => UserPage(user: response)));
+        } else {
+          setState(() {
+            _errorMessage = "Немає користувача з введеним номером телефону";
+          });
+        }
       } else {
-        setState(() {
-          _errorMessage = "No user with provided phone Number";
-        });
+        Employee employee = await EmployeeDataProvider()
+            .getEmployee(int.parse(_userIdTextController.value.text));
+        if (employee != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EmployeePage(
+                    employee: employee,
+                    isLoggedIn: false,
+                  )));
+        } else {
+          setState(() {
+            _errorMessage = "Немає працівника з введеним id";
+          });
+        }
       }
     }
   }

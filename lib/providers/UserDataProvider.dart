@@ -267,4 +267,20 @@ class UserDataProvider {
     }
     return null;
   }
+
+  Future<UserModel> updateUser(int userId, String name, String surname) async {
+    Map<String, String> query = {
+      "userId": userId.toString(),
+      "newSurname": name,
+      "newName": surname
+    };
+    try {
+      var response =
+          await _provider.putResponseToAPI(endpoint: "api/user", query: query);
+      if (response != null) return UserModel.fromJson(response as Map);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
 }

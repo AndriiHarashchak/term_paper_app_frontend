@@ -18,4 +18,16 @@ class EmployeeDataProvider {
       return null;
     }
   }
+
+  Future<Employee> getEmployee(int employeeId) async {
+    Map<String, String> params = {"employeeId": employeeId.toString()};
+    try {
+      var response = await provider.getDataFromAPI(
+          endpoint: "api/employee", query: params);
+      return Employee.fromJson(response as Map);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }
