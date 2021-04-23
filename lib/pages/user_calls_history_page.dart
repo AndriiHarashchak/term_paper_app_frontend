@@ -47,7 +47,42 @@ class _UserCallsPageState extends State<UserCallsPage> {
 
     int i = index ~/ 2;
     CallModel call = userCalls[i];
-    return ListTile(
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(call.callTypeName),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text(
+                        "кому: ${call.interlocutorPhoneNumber.toString()}    тривалість: ${call.duration.toString()} c."),
+                  ),
+                  Text("Час дзвінка:" + call.callDateTime),
+                ],
+              )
+              //Text(call.callTypeName),
+              ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(call.callPrice.toString() + "грн"),
+          ),
+        ),
+      ],
+    );
+    /* ListTile(
       leading: Text(call.callTypeName),
       title: Text(call.interlocutorPhoneNumber.toString() +
           " " +
@@ -55,7 +90,7 @@ class _UserCallsPageState extends State<UserCallsPage> {
           "c"),
       trailing: Text(call.callPrice.toString()),
       subtitle: Text(call.callDateTime),
-    );
+    ); */
   }
 
   void loadData(int userId) async {

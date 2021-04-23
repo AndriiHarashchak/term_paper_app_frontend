@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:term_paper_app_frontend/Models/promotion_model.dart';
-import 'package:term_paper_app_frontend/pages/promotion_create_page.dart';
+import 'package:term_paper_app_frontend/Models/region_model.dart';
+import 'package:term_paper_app_frontend/pages/region_create_edit_page.dart';
 import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
-class PromotionsPage extends StatefulWidget {
+class RegionsPage extends StatefulWidget {
   @override
-  _PromotionsPageState createState() => _PromotionsPageState();
+  _RegionsPageState createState() => _RegionsPageState();
 }
 
-class _PromotionsPageState extends State<PromotionsPage> {
-  List<PromotionModel> activePromotions;
-  List<PromotionModel> promotionsHistory;
+class _RegionsPageState extends State<RegionsPage> {
+  List<RegionModel> activeRegions;
+  List<RegionModel> regionsHistory;
 
   bool isdataLoaded;
   GeneralDataProvider _provider;
@@ -47,7 +47,7 @@ class _PromotionsPageState extends State<PromotionsPage> {
         length: _tabsList.length,
         child: Scaffold(
             appBar: new AppBar(
-              title: Text("Акції"),
+              title: Text("Регіони"),
               bottom: PreferredSize(
                 preferredSize: _tabBar.preferredSize,
                 child: ColoredBox(
@@ -69,10 +69,10 @@ class _PromotionsPageState extends State<PromotionsPage> {
                   padding:
                       EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                   child: ElevatedButton(
-                    child: Text("Створити акцію"),
+                    child: Text("Створити регіон"),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PromotionRegisterPage(
+                          builder: (context) => RegionCreateEditPage(
                                 type: OperationType.create,
                               )));
                     },
@@ -83,12 +83,12 @@ class _PromotionsPageState extends State<PromotionsPage> {
   }
 
   Future<void> loadData() async {
-    var active = await _provider.getPromotions();
-    var history = await _provider.getPromotionsHistory();
-
+    var active = await _provider.getRegions();
+    var history = await _provider.getRegionsHistory();
+    ;
     setState(() {
-      if (active != null) activePromotions = active;
-      if (history != null) promotionsHistory = history;
+      if (active != null) activeRegions = active;
+      if (history != null) regionsHistory = history;
       isdataLoaded = true;
     });
   }
@@ -97,87 +97,38 @@ class _PromotionsPageState extends State<PromotionsPage> {
     switch (tab.text) {
       case "Активні":
         {
-          return getServicesInfo(activePromotions, true);
+          return getServicesInfo(activeRegions, true);
         }
         break;
       case "Історія":
         {
-          return getServicesInfo(promotionsHistory, false);
+          return getServicesInfo(regionsHistory, false);
         }
         break;
     }
     return Container();
   }
 
-  Widget getServicesInfo(List<PromotionModel> promotions, bool isActive) {
+  Widget getServicesInfo(List<RegionModel> regions, bool isActive) {
     if (!isdataLoaded)
       return Center(
         child: CircularProgressIndicator(),
       );
-    if (promotions != null && promotions.isNotEmpty)
+    if (regions != null && regions.isNotEmpty)
       return RefreshIndicator(
           key: isActive == true ? _refreshIndicatorKey : _refreshIndicatorKey1,
           child: ListView.builder(
-              itemCount: promotions.length * 2,
+              itemCount: regions.length * 2,
               itemBuilder: (context, i) {
                 if (i.isOdd) return Divider();
 
                 int index = i ~/ 2;
-                PromotionModel promotion = promotions[index];
+                RegionModel region = regions[index];
                 return ExpansionTile(
-                  title: Text(promotion.promotionName),
+                  title: Text(region.regionName),
                   children: <Widget>[
                     Column(
                       children: [
-                        Divider(),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 5.0),
-                          child: Row(
-                            children: [
-                              Expanded(flex: 2, child: Text("Опис:")),
-                              Expanded(
-                                  flex: 3, child: Text(promotion.description)),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 5.0),
-                          child: Row(
-                            children: [
-                              Expanded(flex: 2, child: Text("Умови:")),
-                              Expanded(
-                                  flex: 3, child: Text(promotion.conditions)),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 5.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 2, child: Text("Термін дії (дні):")),
-                              Expanded(
-                                  flex: 3,
-                                  child:
-                                      Text(promotion.activePeriod.toString())),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 5.0),
-                          child: Row(
-                            children: [
-                              Expanded(flex: 2, child: Text("Дата створення:")),
-                              Expanded(
-                                  flex: 3,
-                                  child: Text(promotion.registrationDate)),
-                            ],
-                          ),
-                        ),
                         Divider(),
                         () {
                           if (isActive) {
@@ -189,16 +140,15 @@ class _PromotionsPageState extends State<PromotionsPage> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 15.0, vertical: 1.0),
                                     child: ElevatedButton(
-                                      child: Text("Редагувати акцію"),
+                                      child: Text("Редагувати регіон"),
                                       onPressed: () {
                                         Navigator.of(context).push(
-                                            MaterialPageRoute(
+                                            new MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PromotionRegisterPage(
-                                                      type:
-                                                          OperationType.update,
-                                                      promotion: promotion,
-                                                    )));
+                                                    RegionCreateEditPage(
+                                                        region: region,
+                                                        type: OperationType
+                                                            .update)));
                                       },
                                     ),
                                   ),
@@ -209,11 +159,10 @@ class _PromotionsPageState extends State<PromotionsPage> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 15.0, vertical: 1.0),
                                     child: TextButton(
-                                      child: Text("Деактивувати акцію"),
+                                      child: Text("Деактивувати регіон"),
                                       onPressed: () async {
-                                        bool ok =
-                                            await _provider.deactivatePromotion(
-                                                promotion.promotionId);
+                                        bool ok = await _provider
+                                            .deactivateRegion(region.regionId);
                                         if (ok) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
@@ -242,8 +191,10 @@ class _PromotionsPageState extends State<PromotionsPage> {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                                 child: TextButton(
-                                  child: Text("Активувати акцію"),
-                                  onPressed: () {},
+                                  child: Text("Активувати регіон"),
+                                  onPressed: () {
+                                    //TODO implement
+                                  },
                                 ),
                               ),
                             );
@@ -256,7 +207,7 @@ class _PromotionsPageState extends State<PromotionsPage> {
               }),
           onRefresh: loadData);
     return Center(
-      child: Text("Немає акцій"),
+      child: Text("Немає регіонів"),
     );
   }
 }

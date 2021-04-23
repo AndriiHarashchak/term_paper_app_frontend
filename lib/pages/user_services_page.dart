@@ -1,5 +1,6 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/userModel.dart';
 import 'package:term_paper_app_frontend/Models/user_service_model.dart';
@@ -21,10 +22,8 @@ class _UserServicesPageState extends State<UserServicesPage>
   List<UserServiceModel> _activeServices;
   bool isDataLoaded = false;
   UserDataProvider _provider;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
-  //List<bool> _historyIsOpen;
-  List<bool> _activeIsOpen;
+
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   @override
   void initState() {
     super.initState();
@@ -92,158 +91,113 @@ class _UserServicesPageState extends State<UserServicesPage>
     switch (tab.text) {
       case "Активні":
         {
-          return getActiveServicesInfo();
+          return getServicesData(_activeServices, true);
         }
         break;
       case "Історія":
         {
-          return getServicesHistory();
+          return getServicesData(_servicesHistory, false);
         }
         break;
     }
     return Container();
   }
 
-  Widget getActiveServicesInfo() {
+  Widget getServicesData(List<UserServiceModel> services, bool isActive) {
     if (!isDataLoaded) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    if (_activeServices != null)
-      return RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: loadData,
-          child: ListView(
-            children: [
-              Column(
-                children: [
-                  ExpansionPanelList(
-                    children: _activeServices.map<ExpansionPanel>((e) {
-                      return ExpansionPanel(
-                        headerBuilder: (context, isOpen) {
-                          return Text(e.serviceName);
-                        },
-                        body: Container(
-                          //height: 70,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Text("Дата підключеня: ")),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(e.activationDate),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Text("Дата відключення: ")),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                        e.endDate != null ? e.endDate : ""),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.0, vertical: 5.0),
-                                  child: ElevatedButton(
-                                    child: Text("Деактивувати"),
-                                    onPressed: () async {
-                                      if (await confirm(context,
-                                          title: Text("Відключення послуги"),
-                                          content: Text(
-                                              "Ви впевнені, що хочете деактивувати тариф?"),
-                                          textOK: Text("Деактивувати"),
-                                          textCancel: Text("Скасувати"))) {
-                                        bool ok =
-                                            await _provider.deactivateService(
-                                                widget.user.userId,
-                                                e.serviceId);
-                                        if (ok) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      "Успішно деактивовано")));
-                                          loadData();
-                                        }
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "Не вдалось деактивувати")));
-                                      }
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        isExpanded: _activeIsOpen[_activeServices.indexOf(e)],
-                      );
-                    }).toList(),
-                    expansionCallback: (i, isOpen) =>
-                        setState(() => _activeIsOpen[i] = !isOpen),
-                  )
-                ],
-              ),
-            ],
-          ));
-    return Center(
-      child: Text("Даних немає"),
-    );
-  }
-
-  Widget getServicesHistory() {
-    if (!isDataLoaded) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    if (_servicesHistory != null)
+    if (services != null)
       return ListView.builder(
+        itemCount: services.length * 2,
         itemBuilder: (context, i) {
           if (i.isOdd) return Divider();
           int index = i ~/ 2;
           return ExpansionTile(
-            title: Text(_servicesHistory[index].serviceName != null
-                ? _servicesHistory[index].serviceName
+            title: Text(services[index].serviceName != null
+                ? services[index].serviceName
                 : "Без імені"),
             children: <Widget>[
               Container(
-                height: 50,
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Expanded(flex: 1, child: Text("Дата підключеня: ")),
                         Expanded(
-                          flex: 2,
-                          child: Text(_servicesHistory[index].activationDate),
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.0, vertical: 5.0),
+                            child: Text("Дата підключеня: "),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(formatter.format(
+                              DateTime.parse(services[index].activationDate))),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        Expanded(flex: 1, child: Text("Дата відключення: ")),
                         Expanded(
-                          flex: 2,
-                          child: Text(_servicesHistory[index].endDate != null
-                              ? _servicesHistory[index].endDate
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.0, vertical: 5.0),
+                            child: Text("Дата відключення: "),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(services[index].endDate != null
+                              ? formatter.format(
+                                  formatter.parse(services[index].endDate))
                               : ""),
                         ),
                       ],
                     ),
+                    () {
+                      if (isActive) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.0, vertical: 5.0),
+                            child: ElevatedButton(
+                              child: Text("Деактивувати"),
+                              onPressed: () async {
+                                if (await confirm(context,
+                                    title: Text("Деактивація послуги"),
+                                    content: Text(
+                                        "Ви впевнені, що хочете деактивувати послугу?"),
+                                    textOK: Text("Деактивувати"),
+                                    textCancel: Text("Скасувати"))) {
+                                  bool ok = await _provider.deactivateService(
+                                      widget.user.userId,
+                                      services[index].serviceId);
+                                  if (ok) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text("Успішно деактивовано")));
+                                    loadData();
+                                  }
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Не вдалось деактивувати")));
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                      return Container();
+                    }()
                   ],
                 ),
               ),
@@ -253,7 +207,6 @@ class _UserServicesPageState extends State<UserServicesPage>
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
-        itemCount: _servicesHistory.length,
       );
     return RefreshIndicator(
       onRefresh: loadData,
@@ -287,14 +240,7 @@ class _UserServicesPageState extends State<UserServicesPage>
     setState(() {
       isDataLoaded = true;
       _activeServices = activeServices;
-      if (_activeServices != null) {
-        _activeIsOpen =
-            List.filled(_activeServices.length, false, growable: true);
-      }
       _servicesHistory = servicesHistory;
-      //if (_servicesHistory != null)
-      /*  _historyIsOpen =
-            List.filled(_servicesHistory.length, false, growable: true); */
     });
   }
 }

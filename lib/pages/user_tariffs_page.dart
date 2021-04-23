@@ -18,12 +18,11 @@ class _UserTariffsPageState extends State<UserTariffsPage>
   List<UserTariffModel> tariffsHistory;
   bool isDataLoaded = false;
   UserDataProvider _provider;
-
-  List<bool> _isOpen;
-
+  TextStyle textStyle;
   @override
   void initState() {
     super.initState();
+    textStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
     _provider = UserDataProvider();
     tabsList.add(Tab(text: "Current"));
     tabsList.add(Tab(text: "History"));
@@ -86,24 +85,184 @@ class _UserTariffsPageState extends State<UserTariffsPage>
         child: CircularProgressIndicator(),
       );
     if (currentTariff != null)
-      return Column(
-        children: [
-          Row(
+      return SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Column(
             children: [
-              Expanded(flex: 1, child: Text("Назва тарифу: ")),
-              Expanded(flex: 2, child: Text(currentTariff.tariffName)),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Назва тарифу:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.tariffName.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Хвилин в мережі:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.minutesWithinTheOperator.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Хвилин на інші мережі:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.minutesToOtherOperators.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("К-сть смс:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.smsCount.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 4, child: Text("Кількісь мегабайт трафіку:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.internetTrafficSize.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Вартість дзвінка:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.callPrice.toString() ?? "",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Вартість смс:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.smsPrice.toString() ?? "",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Місячний платіж:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.pricePerPeriod != null
+                              ? currentTariff.pricePerPeriod.toString()
+                              : "0", //.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Ід регіона:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.regionRef.toString(),
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Стан тарифу:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.isActive == true
+                              ? "Тариф активний"
+                              : "Тариф не активний",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(flex: 4, child: Text("Дата активації:")),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          currentTariff.activationDate ?? "",
+                          style: textStyle,
+                        ))
+                  ],
+                ),
+              ),
+              Divider(),
             ],
           ),
-          Row(
-            children: [
-              Expanded(flex: 1, child: Text("Хвилин на інші оператори: ")),
-              Expanded(
-                  flex: 2,
-                  child:
-                      Text(currentTariff.minutesToOtherOperators.toString())),
-            ],
-          ),
-        ],
+        ),
       );
     return Center(
       child: Text("Дані не доступні"),
@@ -117,49 +276,45 @@ class _UserTariffsPageState extends State<UserTariffsPage>
       );
     }
     if (tariffsHistory != null)
-      return Column(
-        children: [
-          ExpansionPanelList(
-            children: tariffsHistory.map<ExpansionPanel>((e) {
-              return ExpansionPanel(
-                headerBuilder: (context, isOpen) {
-                  return Text(e.tariffName);
-                },
-                body: Container(
-                  height: 50,
-                  child: Column(
-                    children: [
-                      Row(
+      return ListView.builder(
+          itemCount: tariffsHistory.length * 2,
+          itemBuilder: (context, index) {
+            if (index.isOdd) return Divider();
+            int i = index ~/ 2;
+            var tariff = tariffsHistory[i];
+            return ExpansionTile(
+              title: Text(tariff.tariffName),
+              children: [
+                Column(
+                  children: [
+                    Divider(),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                      child: Row(
                         children: [
-                          Expanded(flex: 1, child: Text("Дата підключеня: ")),
-                          Expanded(
-                            flex: 2,
-                            child: Text(e.activationDate),
-                          ),
+                          Expanded(flex: 2, child: Text("Дата підключення:")),
+                          Expanded(flex: 3, child: Text(tariff.activationDate)),
                         ],
                       ),
-                      Row(
+                    ),
+                    Divider(),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                      child: Row(
                         children: [
-                          Expanded(flex: 1, child: Text("Дата відключення: ")),
+                          Expanded(flex: 2, child: Text("Дата відключення:")),
                           Expanded(
-                            flex: 2,
-                            child: Text(e.deactivationDate != null
-                                ? e.deactivationDate
-                                : ""),
-                          ),
+                              flex: 3, child: Text(tariff.deactivationDate)),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                isExpanded: _isOpen[tariffsHistory.indexOf(e)],
-              );
-            }).toList(),
-            expansionCallback: (i, isOpen) =>
-                setState(() => _isOpen[i] = !isOpen),
-          )
-        ],
-      );
+              ],
+            );
+          });
     return Center(
       child: Text("Даних немає"),
     );
@@ -181,8 +336,6 @@ class _UserTariffsPageState extends State<UserTariffsPage>
     setState(() {
       this.currentTariff = currentTariffData;
       tariffsHistory = tariffHistory;
-      if (tariffsHistory != null)
-        _isOpen = List.filled(tariffsHistory.length, false, growable: true);
       isDataLoaded = true;
     });
   }

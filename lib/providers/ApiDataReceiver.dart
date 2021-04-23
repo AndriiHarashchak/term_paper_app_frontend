@@ -58,7 +58,7 @@ class ApiProvider {
       if (response.body.isNotEmpty)
         return json.decode(response.body); // as Map;
     } else {
-      //print(response.reasonPhrase);
+      print(response.reasonPhrase);
       throw Exception(response.reasonPhrase);
     }
   }

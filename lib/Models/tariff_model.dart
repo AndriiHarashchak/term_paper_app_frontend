@@ -10,7 +10,7 @@ class TariffModel {
   double smsPrice;
   double callPrice;
   double pricePerPeriod;
-  double registrationDate;
+  String registrationDate;
   int regionRef;
   bool isActive;
   String activationDate;
@@ -43,7 +43,7 @@ class TariffModel {
       internetTrafficSize: jsonData["InternetTrafficSize"].toDouble() ?? 0,
       smsCount: jsonData["SmsCount"] ?? -1,
       callPrice: jsonData["CallPrice"].toDouble() ?? 0,
-      registrationDate: jsonData["RegistrationDate"],
+      registrationDate: jsonData["RegistationTime"],
       regionRef: jsonData["RegionRef"] ?? 0,
       pricePerPeriod: jsonData["PricePerPeriod"].toDouble() ?? 0,
       isActive: jsonData["IsActive"],
@@ -53,4 +53,28 @@ class TariffModel {
           : null,
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      "tariffName": tariffName,
+      "internetTrafficSize": internetTrafficSize,
+      "minutesWithinTheOperator": minutesWithinTheOperator,
+      "minutesToOtherOperators": minutesToOtherOperators,
+      "smsCount": smsCount,
+      "smsPrice": smsPrice,
+      "callPrice": callPrice,
+      "pricePerPeriod": pricePerPeriod,
+      "regionRef": regionRef
+    };
+  }
 }
+/* {
+  "tariffName": "string",
+  "internetTrafficSize": 0,
+  "minutesWithinTheOperator": 0,
+  "minutesToOtherOperators": 0,
+  "smsCount": 0,
+  "smsPrice": 0,
+  "callPrice": 0,
+  "pricePerPeriod": 0,
+  "regionRef": 0
+} */

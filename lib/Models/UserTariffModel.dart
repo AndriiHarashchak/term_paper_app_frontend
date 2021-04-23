@@ -35,7 +35,11 @@ class UserTariffModel {
         isServicePackageActivated: jsonData["IsServicePackageActivated"],
         isActive: jsonData["IsActive"],
         lastRenewDate: jsonData["LastRenewDate"],
-        activationDate: jsonData["ActivationDate"],
-        deactivationDate: jsonData["DeactivationDate"]);
+        activationDate: jsonData["UserTariffs"] == null
+            ? jsonData["ActivationDate"]
+            : jsonData["UserTariffs"][0]["ActivationDate"],
+        deactivationDate: jsonData["UserTariffs"] == null
+            ? jsonData["DeactivationDate"]
+            : jsonData["UserTariffs"][0]["DeactivationDate"]);
   }
 }

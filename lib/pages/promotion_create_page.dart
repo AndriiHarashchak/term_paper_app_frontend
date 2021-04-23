@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/promotion_model.dart';
 import 'package:term_paper_app_frontend/Models/region_model.dart';
 import 'package:term_paper_app_frontend/pages/promotions_page.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class PromotionRegisterPage extends StatefulWidget {
+  final OperationType type;
+  final PromotionModel promotion;
+  PromotionRegisterPage({Key key, @required this.type, this.promotion})
+      : super(key: key);
   @override
   _PromotionRegisterPageState createState() => _PromotionRegisterPageState();
 }
@@ -13,15 +18,9 @@ class PromotionRegisterPage extends StatefulWidget {
 class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  final _conditionsTextController = new TextEditingController();
-  String conditions;
-  final _promotionNameTextController = new TextEditingController();
+  String _conditions;
   String _promotionName;
-
-  final _descriptionTextController = new TextEditingController();
   String _description;
-
-  final _activePeriodTextController = new TextEditingController();
   String _activePeriod;
 
   List<RegionModel> regions;
@@ -30,13 +29,21 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
   void initState() {
     super.initState();
     _gdprovider = GeneralDataProvider();
+    if (widget.type == OperationType.update) {
+      _conditions = widget.promotion.conditions;
+      _description = widget.promotion.description;
+      _promotionName = widget.promotion.promotionName;
+      _activePeriod = widget.promotion.activePeriod.toString();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Створення акції"),
+        title: Text(widget.type == OperationType.create
+            ? "Створення акції"
+            : "Редагування акції"),
       ),
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -64,10 +71,12 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
                     child: TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          labelText: "Назва послуги",
+                          labelText: "Назва акції",
                           hintText: "Введіть назву акції"),
-                      controller: _promotionNameTextController,
                       keyboardType: TextInputType.text,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : _promotionName,
                       onChanged: (value) {
                         _promotionName = value;
                       },
@@ -87,8 +96,10 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
                       autocorrect: false,
                       decoration: InputDecoration(
                           labelText: "Опис", hintText: "Введіть опис акції"),
-                      controller: _descriptionTextController,
                       keyboardType: TextInputType.text,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : _description,
                       onChanged: (value) {
                         _description = value;
                       },
@@ -102,10 +113,12 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
                       autocorrect: false,
                       decoration: InputDecoration(
                           labelText: "Умови", hintText: "Введіть умови акції"),
-                      controller: _conditionsTextController,
                       keyboardType: TextInputType.text,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : _conditions,
                       onChanged: (value) {
-                        conditions = value;
+                        _conditions = value;
                       },
                       validator: validate,
                     ),
@@ -118,8 +131,10 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
                       decoration: InputDecoration(
                           labelText: "Активний період (діб)",
                           hintText: "Введіть термін дії акції"),
-                      controller: _activePeriodTextController,
                       keyboardType: TextInputType.number,
+                      initialValue: widget.type == OperationType.create
+                          ? ""
+                          : _activePeriod,
                       onChanged: (value) {
                         _activePeriod = value;
                       },
@@ -140,31 +155,45 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: Text("Створити акцію"),
+                        child: Text(widget.type == OperationType.create
+                            ? "Створити акцію"
+                            : "Редагувати акцію"),
                         onPressed: () async {
                           if (!await confirm(
                             context,
-                            textOK: Text("Створити"),
+                            textOK: Text(widget.type == OperationType.create
+                                ? "Створити"
+                                : "Редагувати"),
                             textCancel: Text("Скасувати"),
-                            title: Text("Створення акції"),
-                            content:
-                                Text("Ви впевнені, що хочете створити акцію"),
+                            title: Text(widget.type == OperationType.create
+                                ? "Створення акції"
+                                : "Редагування акції"),
+                            content: Text(widget.type == OperationType.create
+                                ? "Ви впевнені, що хочете створити акцію"
+                                : "Ви впевнені, що хочете редагувати акцію"),
                           )) {
                             return;
                           }
                           PromotionModel newPromotion =
-                              await registerPromotion();
+                              widget.type == OperationType.create
+                                  ? await registerPromotion()
+                                  : await editPromotion();
                           if (newPromotion != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.redAccent,
-                                content: Text("Успішно створено")));
+                                content: Text(
+                                    widget.type == OperationType.create
+                                        ? "Успішно створено"
+                                        : "Успішно редаговано")));
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => PromotionsPage()));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
-                              content: Text("Не вдалось створити акцію"),
+                              content: Text(widget.type == OperationType.create
+                                  ? "Не вдалось створити акцію"
+                                  : "Не вдалось редагувати акцію"),
                             ));
                           }
                         },
@@ -187,7 +216,7 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
     } else {
       PromotionModel promotion = PromotionModel(
           promotionName: _promotionName,
-          conditions: conditions,
+          conditions: _conditions,
           description: _description,
           activePeriod: int.parse(_activePeriod));
       var response = await _gdprovider.registerPromotion(promotion);
@@ -195,8 +224,24 @@ class _PromotionRegisterPageState extends State<PromotionRegisterPage> {
     }
   }
 
+  Future<PromotionModel> editPromotion() async {
+    final FormState form = _formKey.currentState;
+    if (!form.validate()) {
+      return null;
+    } else {
+      PromotionModel promotion = PromotionModel(
+          promotionId: widget.promotion.promotionId,
+          promotionName: _promotionName,
+          conditions: _conditions,
+          description: _description,
+          activePeriod: int.parse(_activePeriod));
+      var response = await _gdprovider.updatePromotion(promotion);
+      return response;
+    }
+  }
+
   String validate(String text) {
     if (text.isNotEmpty && text.length > 2) return null;
-    return "Поле не можу бути пустим";
+    return "Поле не може бути пустим";
   }
 }

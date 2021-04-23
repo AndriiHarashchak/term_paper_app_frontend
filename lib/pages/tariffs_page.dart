@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/tariff_model.dart';
+import 'package:term_paper_app_frontend/pages/new_tariff_page.dart';
 import 'package:term_paper_app_frontend/pages/tariff_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
@@ -70,12 +71,8 @@ class _TariffsPageState extends State<TariffsPage> {
                   child: ElevatedButton(
                     child: Text("Створити тариф"),
                     onPressed: () {
-                      /* Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ActivationPage(
-                            userId: widget.user.userId,
-                            tariffId: widget.user.tariffId,
-                            type: Type.service,
-                          ))); */
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => TariffCreationPage()));
                     },
                   ),
                 ),

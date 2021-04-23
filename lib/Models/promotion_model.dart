@@ -30,6 +30,7 @@ class PromotionModel {
   }
   Map<String, dynamic> toJson() {
     return {
+      "promotionId": promotionId,
       "promotionName": promotionName,
       "conditions": conditions,
       "description": description,

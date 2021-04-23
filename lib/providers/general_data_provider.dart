@@ -225,4 +225,99 @@ class GeneralDataProvider {
     }
     return null;
   }
+
+  Future<PromotionModel> updatePromotion(
+      PromotionModel updatedPromotion) async {
+    try {
+      var requestBody = json.encode(updatedPromotion.toJson());
+      var response = await _provider.putResponseToAPI(
+          endpoint: "api/basedata/promotions", query: null, body: requestBody);
+      return PromotionModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<TariffModel> createTariff(TariffModel newTariff) async {
+    try {
+      var requestBody = json.encode(newTariff.toJson());
+      var response = await _provider.postRequest(
+          endpoint: "api/basedata/tariffs", body: requestBody);
+      return TariffModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<bool> deactivateTariff(int tariffId) async {
+    Map<String, String> params = {
+      "tariffId": tariffId.toString(),
+    };
+    try {
+      await _provider.deleteResponceToAPI(
+          endpoint: "api/basedata/tariffs", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deactivateRegion(int regionId) async {
+    Map<String, String> params = {
+      "regionId": regionId.toString(),
+    };
+    try {
+      await _provider.deleteResponceToAPI(
+          endpoint: "api/basedata/regions", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<List<RegionModel>> getRegionsHistory() async {
+    try {
+      var response = await _provider.getDataFromAPI(
+          endpoint: "api/basedata/regions/history", query: null);
+      if (response == null) return null;
+      List<RegionModel> regions = [];
+      (response as List).forEach((element) {
+        regions.add(RegionModel.fromJson(element));
+      });
+      return regions;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<RegionModel> registerRegion(RegionModel region) async {
+    Map<String, String> params = {
+      "regionName": region.regionName,
+    };
+    try {
+      var response = await _provider.postRequest(
+          endpoint: "api/basedata/regions", query: params, body: null);
+      return RegionModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<RegionModel> updateRegion(RegionModel updatedRegion) async {
+    try {
+      var requestBody = json.encode(updatedRegion.toJson());
+      var response = await _provider.putResponseToAPI(
+          endpoint: "api/basedata/regions", query: null, body: requestBody);
+      return RegionModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
 }

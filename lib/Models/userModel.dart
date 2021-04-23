@@ -36,7 +36,7 @@ class UserModel {
         activationState: jsonData["ActivationState"],
         internetTrafficSize: jsonData["InternetTrafficSize"],
         lastRenewDate: jsonData["LastRenewDate"],
-        minutesToOtherOperators: jsonData["MinutesToOterOperators"],
+        minutesToOtherOperators: jsonData["MinutesToOtherOperators"],
         minutesWithinTheOperator: jsonData["MinutesWithinTheOperator"],
         smsCount: jsonData["SmsCount"],
         moneyAmount: jsonData["MoneyAmount"],

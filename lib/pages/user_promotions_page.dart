@@ -69,7 +69,7 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
               child: ElevatedButton(
-                child: Text("Активувати послугу"),
+                child: Text("Підключити акцію"),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ActivationPage(
@@ -116,26 +116,48 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
             children: _activePromotions.map<ExpansionPanel>((e) {
               return ExpansionPanel(
                 headerBuilder: (context, isOpen) {
-                  return Text(e.promotionName);
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text(e.promotionName),
+                      )
+                    ],
+                  );
                 },
                 body: Container(
-                  height: 50,
                   child: Column(
                     children: [
                       Row(
                         children: [
-                          Expanded(flex: 1, child: Text("Дата підключеня: ")),
                           Expanded(
-                            flex: 2,
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 5.0),
+                              child: Text("Дата підключеня: "),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
                             child: Text(e.activationDate),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          Expanded(flex: 1, child: Text("Дата відключення: ")),
                           Expanded(
-                            flex: 2,
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 5.0),
+                              child: Text("Дата відключення: "),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
                             child: Text(e.endDate != null ? e.endDate : ""),
                           ),
                         ],
@@ -169,26 +191,48 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
             children: _promotionsHistory.map<ExpansionPanel>((e) {
               return ExpansionPanel(
                 headerBuilder: (context, isOpen) {
-                  return Text(e.promotionName);
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Text(e.promotionName),
+                      )
+                    ],
+                  );
                 },
                 body: Container(
-                  height: 50,
                   child: Column(
                     children: [
                       Row(
                         children: [
-                          Expanded(flex: 1, child: Text("Дата підключеня: ")),
                           Expanded(
-                            flex: 2,
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 5.0),
+                              child: Text("Дата підключеня: "),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
                             child: Text(e.activationDate),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          Expanded(flex: 1, child: Text("Дата відключення: ")),
                           Expanded(
-                            flex: 2,
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 5.0),
+                              child: Text("Дата відключення: "),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
                             child: Text(e.endDate != null ? e.endDate : ""),
                           ),
                         ],
