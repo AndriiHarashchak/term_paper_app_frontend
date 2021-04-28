@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
+import 'package:term_paper_app_frontend/pages/employee_register_page.dart';
 import 'package:term_paper_app_frontend/pages/offices_page.dart';
 import 'package:term_paper_app_frontend/pages/search_page.dart';
 
@@ -41,12 +42,9 @@ class EmployeeNavigationPage extends StatelessWidget {
               child: ElevatedButton(
                 child: Text("Реєстрація працівника"),
                 onPressed: () {
-                  /* Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => SearchPage(
-                            title: "Пошук користувача",
-                          )),
-                ); */
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => EmployeeRegisterPage(),
+                  ));
                 },
               ),
             ),

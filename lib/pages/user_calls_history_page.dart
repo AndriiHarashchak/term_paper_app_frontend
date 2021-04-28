@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:term_paper_app_frontend/Models/user_call_model.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
 
@@ -12,6 +13,7 @@ class UserCallsPage extends StatefulWidget {
 class _UserCallsPageState extends State<UserCallsPage> {
   bool isLoaded = false;
   List<CallModel> userCalls;
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   @override
   void initState() {
     super.initState();
@@ -58,20 +60,25 @@ class _UserCallsPageState extends State<UserCallsPage> {
         ),
         Expanded(
           flex: 3,
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(
-                        "кому: ${call.interlocutorPhoneNumber.toString()}    тривалість: ${call.duration.toString()} c."),
-                  ),
-                  Text("Час дзвінка:" + call.callDateTime),
-                ],
-              )
-              //Text(call.callTypeName),
-              ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          "кому: ${call.interlocutorPhoneNumber.toString()} : ${call.duration.toString()} c."),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Час дзвінка:" + getTime(call.callDateTime)),
+                    ),
+                  ],
+                )),
+            //Text(call.callTypeName),
+          ),
         ),
         Expanded(
           flex: 1,
@@ -91,6 +98,18 @@ class _UserCallsPageState extends State<UserCallsPage> {
       trailing: Text(call.callPrice.toString()),
       subtitle: Text(call.callDateTime),
     ); */
+  }
+
+  String getTime(String time) {
+    int idx = time.indexOf('T');
+    List<String> parts = [
+      time.substring(0, idx).trim(),
+      time.substring(idx + 1).trim()
+    ];
+    int index2 = parts[1].indexOf(".");
+    String time2 = parts[1].substring(0, index2).trim();
+    String result = parts[0] + " " + time2;
+    return result;
   }
 
   void loadData(int userId) async {

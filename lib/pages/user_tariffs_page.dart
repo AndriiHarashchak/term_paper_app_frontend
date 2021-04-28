@@ -24,8 +24,8 @@ class _UserTariffsPageState extends State<UserTariffsPage>
     super.initState();
     textStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
     _provider = UserDataProvider();
-    tabsList.add(Tab(text: "Current"));
-    tabsList.add(Tab(text: "History"));
+    tabsList.add(Tab(text: "Поточний"));
+    tabsList.add(Tab(text: "Історія"));
     loadData();
   }
 
@@ -65,12 +65,12 @@ class _UserTariffsPageState extends State<UserTariffsPage>
 
   Widget _getPage(Tab tab) {
     switch (tab.text) {
-      case "Current":
+      case "Поточний":
         {
           return getCurrentTariffInfo();
         }
         break;
-      case "History":
+      case "Історія":
         {
           return getTariffsHisory();
         }

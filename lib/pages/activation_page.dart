@@ -235,19 +235,12 @@ class _ActivationPageState extends State<ActivationPage> {
   void loadServicesData() async {
     var response = await _provider.getServices(widget.tariffId);
     var userServices = await _provider.getUserServices(widget.userId);
-    var userServicesHistory =
-        await _provider.getUserServicesHistory(widget.userId);
+    //var userServicesHistory =
+    //    await _provider.getUserServicesHistory(widget.userId);
     List<UserServiceModel> temp = [];
     for (var element in response) {
       if (userServices != null) {
         userServices
-            .where((element1) => element1.serviceId == element.serviceId)
-            .forEach((element2) {
-          temp.add(element2);
-        });
-      }
-      if (userServicesHistory != null) {
-        userServicesHistory
             .where((element1) => element1.serviceId == element.serviceId)
             .forEach((element2) {
           temp.add(element2);

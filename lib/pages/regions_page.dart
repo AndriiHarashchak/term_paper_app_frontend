@@ -85,7 +85,7 @@ class _RegionsPageState extends State<RegionsPage> {
   Future<void> loadData() async {
     var active = await _provider.getRegions();
     var history = await _provider.getRegionsHistory();
-    ;
+
     setState(() {
       if (active != null) activeRegions = active;
       if (history != null) regionsHistory = history;

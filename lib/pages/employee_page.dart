@@ -199,6 +199,21 @@ class _EmployeePageState extends State<EmployeePage> {
               padding: EdgeInsets.symmetric(vertical: 5.0),
               child: Row(
                 children: [
+                  Expanded(flex: 4, child: Text("Пароль:")),
+                  Expanded(
+                      flex: 4,
+                      child: Text(
+                        employee.password ?? "",
+                        style: textStyle,
+                      ))
+                ],
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0),
+              child: Row(
+                children: [
                   Expanded(flex: 4, child: Text("Дата звільнення:")),
                   Expanded(
                       flex: 4,

@@ -153,7 +153,7 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15.0, vertical: 5.0),
-                              child: Text("Дата відключення: "),
+                              child: Text("Дата завершення дії: "),
                             ),
                           ),
                           Expanded(

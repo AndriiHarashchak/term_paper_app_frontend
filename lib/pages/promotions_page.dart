@@ -174,7 +174,8 @@ class _PromotionsPageState extends State<PromotionsPage> {
                               Expanded(flex: 2, child: Text("Дата створення:")),
                               Expanded(
                                   flex: 3,
-                                  child: Text(promotion.registrationDate)),
+                                  child: Text(
+                                      getTime(promotion.registrationDate))),
                             ],
                           ),
                         ),
@@ -258,5 +259,17 @@ class _PromotionsPageState extends State<PromotionsPage> {
     return Center(
       child: Text("Немає акцій"),
     );
+  }
+
+  String getTime(String time) {
+    int idx = time.indexOf('T');
+    List<String> parts = [
+      time.substring(0, idx).trim(),
+      time.substring(idx + 1).trim()
+    ];
+    int index2 = parts[1].indexOf(".");
+    String time2 = parts[1].substring(0, index2).trim();
+    String result = parts[0] + " " + time2;
+    return result;
   }
 }

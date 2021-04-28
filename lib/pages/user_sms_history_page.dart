@@ -52,10 +52,22 @@ class _UserSmsPageState extends State<UserSmsPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Text(sms.smsTypeName)],
       ),
-      title: Text(sms.receiverPhoneNumber.toString()),
-      trailing: Text(sms.price.toString()),
-      subtitle: Text(sms.timeSent),
+      title: Text("Абонент: " + sms.receiverPhoneNumber.toString()),
+      trailing: Text(sms.price.toString() + " грн."),
+      subtitle: Text(getTime(sms.timeSent)),
     );
+  }
+
+  String getTime(String time) {
+    int idx = time.indexOf('T');
+    List<String> parts = [
+      time.substring(0, idx).trim(),
+      time.substring(idx + 1).trim()
+    ];
+    int index2 = parts[1].indexOf(".");
+    String time2 = parts[1].substring(0, index2).trim();
+    String result = parts[0] + " " + time2;
+    return result;
   }
 
   void loadData(int userId) async {

@@ -10,6 +10,7 @@
 ] */
 
 class UserServiceModel {
+  int userServiceId;
   int serviceId;
   String serviceName;
   String conditions;
@@ -18,7 +19,8 @@ class UserServiceModel {
   String endDate;
 
   UserServiceModel(
-      {this.serviceId,
+      {this.userServiceId,
+      this.serviceId,
       this.serviceName,
       this.conditions,
       this.price,
@@ -27,6 +29,7 @@ class UserServiceModel {
 
   factory UserServiceModel.fromJson(Map<String, dynamic> jsonData) {
     return UserServiceModel(
+        userServiceId: jsonData["UserServiceId"],
         serviceId: jsonData["ServiceId"],
         serviceName: jsonData["ServiceName"],
         conditions: jsonData["Conditions"],

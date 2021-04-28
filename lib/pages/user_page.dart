@@ -37,7 +37,7 @@ class _UserPageState extends State<UserPage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Інформація про користувача"),
+        title: Text("Інформація про абонента"),
         actions: [
           IconButton(
               icon: Icon(Icons.edit),
@@ -74,7 +74,7 @@ class _UserPageState extends State<UserPage> {
                               child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    widget.user.surname,
+                                    widget.user.name,
                                     style: textStyle,
                                   )),
                             ),

@@ -51,17 +51,29 @@ class _UserPaymentsPageState extends State<UserPaymentsPage> {
     PaymentModel payment = userPayments[i];
     return Container(
       width: double.infinity,
-      height: 50,
-      child: Row(
-        children: [
-          Expanded(flex: 1, child: Text(payment.paymentDateAndTime)),
-          Expanded(flex: 2, child: Text(payment.description)),
-          Expanded(
-              flex: 1,
-              child: Text("Сума: " + payment.rate.toString() + " uan")),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Row(
+          children: [
+            Expanded(flex: 1, child: Text(getTime(payment.paymentDateAndTime))),
+            Expanded(flex: 2, child: Text(payment.description)),
+            Expanded(flex: 1, child: Text(payment.rate.toString() + " грн")),
+          ],
+        ),
       ),
     );
+  }
+
+  String getTime(String time) {
+    int idx = time.indexOf('T');
+    List<String> parts = [
+      time.substring(0, idx).trim(),
+      time.substring(idx + 1).trim()
+    ];
+    int index2 = parts[1].indexOf(".");
+    String time2 = parts[1].substring(0, index2).trim();
+    String result = parts[0] + " " + time2;
+    return result;
   }
 
   void loadData(int userId) async {

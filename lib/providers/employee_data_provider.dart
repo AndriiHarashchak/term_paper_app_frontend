@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/providers/ApiDataReceiver.dart';
 
@@ -29,5 +31,17 @@ class EmployeeDataProvider {
       print(e.toString());
       return null;
     }
+  }
+
+  Future<Employee> createEmployee(EmployeeCreateModel newEmployee) async {
+    try {
+      var requestBody = json.encode(newEmployee.toJson());
+      var response = await provider.postRequest(
+          endpoint: "api/employee", body: requestBody);
+      return Employee.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
   }
 }

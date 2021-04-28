@@ -178,10 +178,9 @@ class UserDataProvider {
     }
   }
 
-  Future<bool> deactivateService(int userId, int serviceId) async {
+  Future<bool> deactivateService(int userServiceId) async {
     Map<String, String> params = {
-      "userId": userId.toString(),
-      "serviceId": serviceId.toString()
+      "userServiceId": userServiceId.toString(),
     };
     try {
       await _provider.deleteResponceToAPI(

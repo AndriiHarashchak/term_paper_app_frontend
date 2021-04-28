@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:term_paper_app_frontend/Models/office_model.dart';
+import 'package:term_paper_app_frontend/Models/post_model.dart';
 import 'package:term_paper_app_frontend/Models/promotion_model.dart';
 import 'package:term_paper_app_frontend/Models/region_model.dart';
 import 'package:term_paper_app_frontend/Models/service_model.dart';
@@ -319,5 +320,20 @@ class GeneralDataProvider {
       print(e.toString());
     }
     return null;
+  }
+
+  Future<List<PostModel>> getPosts() async {
+    try {
+      var response = await _provider.getDataFromAPI(
+          endpoint: "api/employee/posts", query: null);
+      List<PostModel> data = [];
+      (response as List).forEach((element) {
+        data.add(PostModel.fromJson(element));
+      });
+      return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 }

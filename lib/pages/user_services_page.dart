@@ -147,7 +147,9 @@ class _UserServicesPageState extends State<UserServicesPage>
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15.0, vertical: 5.0),
-                            child: Text("Дата відключення: "),
+                            child: Text(isActive == true
+                                ? "Дата завершення дії: "
+                                : "Дата відключення:"),
                           ),
                         ),
                         Expanded(
@@ -176,20 +178,21 @@ class _UserServicesPageState extends State<UserServicesPage>
                                     textOK: Text("Деактивувати"),
                                     textCancel: Text("Скасувати"))) {
                                   bool ok = await _provider.deactivateService(
-                                      widget.user.userId,
-                                      services[index].serviceId);
+                                      services[index].userServiceId);
                                   if (ok) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
+                                            backgroundColor: Colors.redAccent,
                                             content:
                                                 Text("Успішно деактивовано")));
                                     loadData();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            backgroundColor: Colors.redAccent,
+                                            content: Text(
+                                                "Не вдалось деактивувати")));
                                   }
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text("Не вдалось деактивувати")));
                                 }
                               },
                             ),

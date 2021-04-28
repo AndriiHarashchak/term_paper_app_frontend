@@ -151,7 +151,9 @@ class _OfficesPageState extends State<OfficesPage> {
                             children: [
                               Expanded(
                                   flex: 2, child: Text("Дата відкриття: ")),
-                              Expanded(flex: 3, child: Text(office.openedAt)),
+                              Expanded(
+                                  flex: 3,
+                                  child: Text(getTime(office.openedAt))),
                             ],
                           ),
                         ),
@@ -165,7 +167,8 @@ class _OfficesPageState extends State<OfficesPage> {
                                     flex: 2, child: Text("Дата закритття:")),
                                 Expanded(
                                     flex: 3,
-                                    child: Text(office.closingDate ?? "")),
+                                    child: Text(
+                                        getTime(office.closingDate) ?? "")),
                               ],
                             ),
                           ),
@@ -212,5 +215,14 @@ class _OfficesPageState extends State<OfficesPage> {
     return Center(
       child: Text("Немає офісів"),
     );
+  }
+
+  String getTime(String time) {
+    int idx = time.indexOf('T');
+    List<String> parts = [
+      time.substring(0, idx).trim(),
+      time.substring(idx + 1).trim()
+    ];
+    return parts[0];
   }
 }

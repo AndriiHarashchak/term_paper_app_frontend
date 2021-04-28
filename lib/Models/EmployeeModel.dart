@@ -53,3 +53,31 @@ class Employee {
     return data;
   }
 }
+
+/* {
+  "name": "Name",
+  "surname": "Surname",
+  "salary": 1000,
+  "postRef": 1,
+  "officeRef": 5
+}*/
+class EmployeeCreateModel {
+  String name;
+  String surname;
+  double salary;
+  int postRef;
+  int officeRef;
+
+  EmployeeCreateModel(
+      {this.name, this.surname, this.salary, this.officeRef, this.postRef});
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "surname": surname,
+      "salary": salary,
+      "officeRef": officeRef,
+      "postRef": postRef,
+    };
+  }
+}
