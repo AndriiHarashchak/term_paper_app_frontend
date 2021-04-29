@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:term_paper_app_frontend/Models/user_call_model.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 
 class UserCallsPage extends StatefulWidget {
   final int userId;
@@ -73,7 +74,8 @@ class _UserCallsPageState extends State<UserCallsPage> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Час дзвінка:" + getTime(call.callDateTime)),
+                      child: Text("Час дзвінка:" +
+                          DataModifier.getTimeAndDate(call.callDateTime)),
                     ),
                   ],
                 )),
@@ -84,7 +86,7 @@ class _UserCallsPageState extends State<UserCallsPage> {
           flex: 1,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text(call.callPrice.toString() + "грн"),
+            child: Text(call.callPrice.toString() + " грн"),
           ),
         ),
       ],
@@ -98,18 +100,6 @@ class _UserCallsPageState extends State<UserCallsPage> {
       trailing: Text(call.callPrice.toString()),
       subtitle: Text(call.callDateTime),
     ); */
-  }
-
-  String getTime(String time) {
-    int idx = time.indexOf('T');
-    List<String> parts = [
-      time.substring(0, idx).trim(),
-      time.substring(idx + 1).trim()
-    ];
-    int index2 = parts[1].indexOf(".");
-    String time2 = parts[1].substring(0, index2).trim();
-    String result = parts[0] + " " + time2;
-    return result;
   }
 
   void loadData(int userId) async {

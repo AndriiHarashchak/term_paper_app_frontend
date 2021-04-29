@@ -4,10 +4,15 @@ import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/Models/office_model.dart';
 import 'package:term_paper_app_frontend/Models/post_model.dart';
 import 'package:term_paper_app_frontend/pages/employee_page.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 import 'package:term_paper_app_frontend/providers/employee_data_provider.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class EmployeeRegisterPage extends StatefulWidget {
+  final OperationType type;
+  final Employee employee;
+  EmployeeRegisterPage({Key key, @required this.type, this.employee})
+      : super(key: key);
   @override
   _EmployeeRegisterPageState createState() => _EmployeeRegisterPageState();
 }
@@ -27,17 +32,30 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
   @override
   void initState() {
     super.initState();
-    _gdprovider = GeneralDataProvider();
-    offices = [];
-    posts = [];
-    loadRegionsAndOffices();
+    () async {
+      _gdprovider = GeneralDataProvider();
+      offices = [];
+      posts = [];
+      await loadRegionsAndOffices();
+      if (widget.type == OperationType.update) {
+        _surname = widget.employee.surname;
+        _name = widget.employee.name;
+        _salary = widget.employee.salary.toString();
+        selectedOffice = offices.firstWhere(
+            (element) => element.officeId == widget.employee.officeRef);
+        selectedPost = posts
+            .firstWhere((element) => element.postId == widget.employee.postRef);
+      }
+    }();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Реєстрація працівника"),
+        title: Text(widget.type == OperationType.update
+            ? "Редагування даних"
+            : "Реєстрація працівника"),
       ),
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -51,10 +69,13 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
             onWillPop: () async {
               return await confirm(context,
                   title: Text("Скасування"),
-                  textOK: Text("Відмінити створення"),
+                  textOK: Text(widget.type == OperationType.update
+                      ? "Відмінити редагування"
+                      : "Відмінити створення"),
                   textCancel: Text("Залишитись"),
-                  content: Text(
-                      "Ви впевнені, що хочете сказувати реєстрацію нового працвника?")); //true if can be popped
+                  content: Text(widget.type == OperationType.update
+                      ? "Ви впевнені, що хочете скаcувати редагування даних працвника?"
+                      : "Ви впевнені, що хочете скасувати реєстрацію нового працвника?")); //true if can be popped
             },
             child: Card(
               child: Column(
@@ -71,6 +92,9 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
                       onChanged: (value) {
                         _name = value;
                       },
+                      initialValue: widget.type == OperationType.update
+                          ? widget.employee.name
+                          : "",
                       validator: validate,
                     ),
                   ),
@@ -85,6 +109,9 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
                       onChanged: (value) {
                         _surname = value;
                       },
+                      initialValue: widget.type == OperationType.update
+                          ? widget.employee.surname
+                          : "",
                       validator: validate,
                     ),
                   ),
@@ -99,6 +126,9 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
                       onChanged: (value) {
                         _salary = value;
                       },
+                      initialValue: widget.type == OperationType.update
+                          ? widget.employee.salary.toString()
+                          : "",
                       validator: (text) {
                         if (double.tryParse(text) != null) {
                           double value = double.parse(text);
@@ -184,23 +214,36 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: Text("Зареєструвати працівника"),
+                        child: Text(widget.type == OperationType.update
+                            ? "Редагувати працівника"
+                            : "Зареєструвати працівника"),
                         onPressed: () async {
                           if (!await confirm(
                             context,
-                            textOK: Text("Зареєструвати"),
+                            textOK: Text(widget.type == OperationType.update
+                                ? "Редагувати"
+                                : "Зареєструвати"),
                             textCancel: Text("Скасувати"),
-                            title: Text("Реєстрація працівника?"),
-                            content: Text(
-                                "Ви впевнені, що хочете зареєструвати працівника"),
+                            title: Text(widget.type == OperationType.update
+                                ? "Редагування працівника"
+                                : "Реєстрація працівника?"),
+                            content: Text(widget.type == OperationType.update
+                                ? "Ви впевнені, що хочете редагувати дані працівника"
+                                : "Ви впевнені, що хочете зареєструвати працівника"),
                           )) {
                             return;
                           }
-                          Employee newEmployee = await registedUser();
+                          Employee newEmployee =
+                              widget.type == OperationType.update
+                                  ? await editEmployee()
+                                  : await registedEmployee();
                           if (newEmployee != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.redAccent,
-                                content: Text("Успішно зареєстровано")));
+                                content: Text(
+                                    widget.type == OperationType.update
+                                        ? "Успішно редаговано"
+                                        : "Успішно зареєстровано")));
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
                                     builder: (context) => EmployeePage(
@@ -210,8 +253,9 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
-                              content:
-                                  Text("Не вдалось зареєструвати працівника"),
+                              content: Text(widget.type == OperationType.update
+                                  ? "Не вдалось редагувати працівника"
+                                  : "Не вдалось зареєструвати працівника"),
                             ));
                           }
                         },
@@ -227,7 +271,7 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
     );
   }
 
-  Future<Employee> registedUser() async {
+  Future<Employee> registedEmployee() async {
     final FormState form = _formKey.currentState;
     if (!form.validate()) {
       return null;
@@ -240,6 +284,24 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
         officeRef: selectedOffice.officeId,
       );
       var response = await EmployeeDataProvider().createEmployee(employee);
+      return response;
+    }
+  }
+
+  Future<Employee> editEmployee() async {
+    final FormState form = _formKey.currentState;
+    if (!form.validate()) {
+      return null;
+    } else {
+      EmployeeCreateModel employee = EmployeeCreateModel(
+        employeeId: widget.employee.id,
+        name: _name,
+        surname: _surname,
+        salary: double.parse(_salary),
+        postRef: selectedPost.postId,
+        officeRef: selectedOffice.officeId,
+      );
+      var response = await EmployeeDataProvider().editEmployee(employee);
       return response;
     }
   }

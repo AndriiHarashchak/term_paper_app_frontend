@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/EmployeeModel.dart';
 import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
+import 'package:term_paper_app_frontend/pages/employee_register_page.dart';
 import 'package:term_paper_app_frontend/pages/login_page.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 
 class EmployeePage extends StatefulWidget {
   final Employee employee;
@@ -50,13 +54,18 @@ class _EmployeePageState extends State<EmployeePage> {
   Widget getEmployeeInfo(Employee employee) {
     TextStyle textStyle =
         TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
+    double width = 0;
+    if (kIsWeb)
+      width = MediaQuery.of(context).size.height / 3.0;
+    else
+      width = MediaQuery.of(context).size.width / 3.0;
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(15.0),
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.width / 3.0,
+              height: width,
               child: Row(
                 children: [
                   Expanded(
@@ -111,7 +120,7 @@ class _EmployeePageState extends State<EmployeePage> {
                       padding: EdgeInsets.all(10),
                       child: CircleAvatar(
                         child: Text("Avatar"),
-                        radius: MediaQuery.of(context).size.width / 6,
+                        radius: width / 2.0,
                         backgroundColor: Colors.red,
                       ),
                     ),
@@ -154,7 +163,7 @@ class _EmployeePageState extends State<EmployeePage> {
               padding: EdgeInsets.symmetric(vertical: 5.0),
               child: Row(
                 children: [
-                  Expanded(flex: 4, child: Text("Заробітня плата:")),
+                  Expanded(flex: 4, child: Text("Заробітня плата (грн):")),
                   Expanded(
                       flex: 4,
                       child: Text(
@@ -188,7 +197,7 @@ class _EmployeePageState extends State<EmployeePage> {
                   Expanded(
                       flex: 4,
                       child: Text(
-                        employee.hiringDate,
+                        DataModifier.getDate(employee.hiringDate),
                         style: textStyle,
                       ))
                 ],
@@ -218,13 +227,29 @@ class _EmployeePageState extends State<EmployeePage> {
                   Expanded(
                       flex: 4,
                       child: Text(
-                        employee.dismissalDate ?? "",
+                        employee.dismissalDate != null &&
+                                employee.dismissalDate.isNotEmpty
+                            ? DataModifier.getDate(employee.dismissalDate)
+                            : "",
                         style: textStyle,
                       ))
                 ],
               ),
             ),
             Divider(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => EmployeeRegisterPage(
+                            employee: widget.employee,
+                            type: OperationType.update,
+                          )))
+                },
+                child: Text("Редагування даних"),
+              ),
+            ),
           ],
         ),
       ),

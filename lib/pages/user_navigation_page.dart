@@ -13,7 +13,7 @@ class _UsernavigationpageState extends State<Usernavigationpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Користувачі"),
+        title: Text("Абоненти"),
       ),
       drawer: CustomDrawer(),
       body: Column(
@@ -24,13 +24,13 @@ class _UsernavigationpageState extends State<Usernavigationpage> {
               width: double.infinity,
               height: 80,
               child: ElevatedButton(
-                child: Text("Інформація про користувача"),
+                child: Text("Інформація про абонента"),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => SearchPage(
                               type: SearchType.user,
-                              title: "Пошук користувача",
+                              title: "Пошук абонента",
                             )),
                   );
                 },
@@ -43,7 +43,7 @@ class _UsernavigationpageState extends State<Usernavigationpage> {
               width: double.infinity,
               height: 80,
               child: ElevatedButton(
-                child: Text("Реєстрація користувача"),
+                child: Text("Реєстрація абонента"),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => UserRegisterPage()));

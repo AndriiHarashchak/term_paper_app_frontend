@@ -3,6 +3,7 @@ import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
 import 'package:term_paper_app_frontend/pages/employee_register_page.dart';
 import 'package:term_paper_app_frontend/pages/offices_page.dart';
 import 'package:term_paper_app_frontend/pages/search_page.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 
 class EmployeeNavigationPage extends StatelessWidget {
   @override
@@ -43,7 +44,9 @@ class EmployeeNavigationPage extends StatelessWidget {
                 child: Text("Реєстрація працівника"),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => EmployeeRegisterPage(),
+                    builder: (context) => EmployeeRegisterPage(
+                      type: OperationType.create,
+                    ),
                   ));
                 },
               ),

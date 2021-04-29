@@ -25,7 +25,7 @@ class _OfficesPageState extends State<OfficesPage> {
     isdataLoaded = false;
     _provider = new GeneralDataProvider();
     _tabsList.add(Tab(text: "Працюючі"));
-    _tabsList.add(Tab(text: "Історія"));
+    _tabsList.add(Tab(text: "Закриті"));
     loadData();
   }
 
@@ -104,7 +104,7 @@ class _OfficesPageState extends State<OfficesPage> {
           return getOfficesInfo(activeOffices, true);
         }
         break;
-      case "Історія":
+      case "Закриті":
         {
           return getOfficesInfo(officesHistory, false);
         }
@@ -129,7 +129,7 @@ class _OfficesPageState extends State<OfficesPage> {
                 int index = i ~/ 2;
                 OfficeModel office = offices[index];
                 return ExpansionTile(
-                  title: Text("Office " + office.officeId.toString()),
+                  title: Text("Офіс " + office.officeId.toString()),
                   children: <Widget>[
                     Column(
                       children: [

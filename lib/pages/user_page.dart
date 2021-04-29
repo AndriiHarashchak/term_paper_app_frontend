@@ -12,7 +12,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class UserPage extends StatefulWidget {
   final UserModel user;
-  //final Function(String, dynamic) ontapped;
   UserPage({Key key, @required this.user}) : super(key: key);
 
   @override

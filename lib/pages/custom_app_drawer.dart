@@ -23,7 +23,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 _getGeader(
                     snapshot.hasData ? Employee.fromJson(snapshot.data) : null),
                 ListTile(
-                  title: Text("Користувачі"),
+                  title: Text("Абоненти"),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(
@@ -34,7 +34,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 Divider(),
                 ListTile(
-                  title: Text("Тарифи та послуги"),
+                  title: Text("Операційні дані"),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(
@@ -63,10 +63,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   Widget _getGeader(Employee employee) {
     return UserAccountsDrawerHeader(
-      accountName: employee != null ? Text(employee.id.toString()) : Text("id"),
+      accountName:
+          employee != null ? Text("ід: " + employee.id.toString()) : Text("id"),
       accountEmail: employee != null
-          ? Text(employee.name + employee.surname)
-          : Text("employee name and surname"),
+          ? Text(employee.name + " " + employee.surname)
+          : Text("Ім'я та прізвище працівника"),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.white,
         child: Text(

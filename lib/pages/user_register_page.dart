@@ -41,7 +41,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Реєстрація користувача"),
+        title: Text("Реєстрація абонента"),
       ),
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -58,7 +58,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                   textOK: Text("Відмінити створення"),
                   textCancel: Text("Залишитись"),
                   content: Text(
-                      "Ви впевнені, що хочете сказувати створення нового користувача?")); //true if can be popped
+                      "Ви впевнені, що хочете сказувати створення нового абонента?")); //true if can be popped
             },
             child: Card(
               child: Column(
@@ -187,15 +187,15 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: Text("Зареєструвати користувача"),
+                        child: Text("Зареєструвати абонента"),
                         onPressed: () async {
                           if (!await confirm(
                             context,
                             textOK: Text("Зареєструвати"),
                             textCancel: Text("Скасувати"),
-                            title: Text("Реєстрація користувача?"),
+                            title: Text("Реєстрація абонента?"),
                             content: Text(
-                                "Ви впевнені, що хочете зареєструвати користувача"),
+                                "Ви впевнені, що хочете зареєструвати абонента"),
                           )) {
                             return;
                           }
@@ -203,7 +203,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                           if (newUser != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.redAccent,
-                                content: Text("Успішно створено")));
+                                content: Text("Успішно зареєстровано")));
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) =>
@@ -212,7 +212,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
                               content:
-                                  Text("Не вдалось зареєструвати користувача"),
+                                  Text("Не вдалось зареєструвати абонента"),
                             ));
                           }
                         },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/service_model.dart';
 import 'package:term_paper_app_frontend/pages/service_create_page.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class ServicesPage extends StatefulWidget {
@@ -145,11 +146,10 @@ class _ServicesPageState extends State<ServicesPage> {
                               horizontal: 15.0, vertical: 5.0),
                           child: Row(
                             children: [
-                              Expanded(flex: 2, child: Text("Ціна")),
+                              Expanded(flex: 2, child: Text("Ціна (грн)")),
                               Expanded(
                                   flex: 3,
-                                  child:
-                                      Text(service.price.toString() + " uan")),
+                                  child: Text(service.price.toString())),
                             ],
                           ),
                         ),
@@ -174,8 +174,8 @@ class _ServicesPageState extends State<ServicesPage> {
                               Expanded(flex: 2, child: Text("Дата створення:")),
                               Expanded(
                                   flex: 3,
-                                  child:
-                                      Text(getTime(service.registrationDate))),
+                                  child: Text(DataModifier.getDate(
+                                      service.registrationDate))),
                             ],
                           ),
                         ),

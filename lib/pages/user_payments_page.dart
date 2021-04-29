@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/payment_model.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 
 class UserPaymentsPage extends StatefulWidget {
   final int userId;
@@ -55,25 +56,16 @@ class _UserPaymentsPageState extends State<UserPaymentsPage> {
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Row(
           children: [
-            Expanded(flex: 1, child: Text(getTime(payment.paymentDateAndTime))),
+            Expanded(
+                flex: 1,
+                child: Text(
+                    DataModifier.getTimeAndDate(payment.paymentDateAndTime))),
             Expanded(flex: 2, child: Text(payment.description)),
             Expanded(flex: 1, child: Text(payment.rate.toString() + " грн")),
           ],
         ),
       ),
     );
-  }
-
-  String getTime(String time) {
-    int idx = time.indexOf('T');
-    List<String> parts = [
-      time.substring(0, idx).trim(),
-      time.substring(idx + 1).trim()
-    ];
-    int index2 = parts[1].indexOf(".");
-    String time2 = parts[1].substring(0, index2).trim();
-    String result = parts[0] + " " + time2;
-    return result;
   }
 
   void loadData(int userId) async {

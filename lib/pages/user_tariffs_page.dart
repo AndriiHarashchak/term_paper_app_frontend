@@ -3,6 +3,7 @@ import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/UserTariffModel.dart';
 import 'package:term_paper_app_frontend/Models/tariff_model.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 
 class UserTariffsPage extends StatefulWidget {
   final int userId;
@@ -44,7 +45,7 @@ class _UserTariffsPageState extends State<UserTariffsPage>
       length: tabsList.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Тарифи користувача"),
+          title: Text("Тарифи абонента"),
           bottom: PreferredSize(
             preferredSize: _tabBar.preferredSize,
             child: ColoredBox(
@@ -253,7 +254,10 @@ class _UserTariffsPageState extends State<UserTariffsPage>
                     Expanded(
                         flex: 4,
                         child: Text(
-                          currentTariff.activationDate ?? "",
+                          currentTariff.userTariffInfo.activationDate != null
+                              ? DataModifier.getTimeAndDate(
+                                  currentTariff.userTariffInfo.activationDate)
+                              : "",
                           style: textStyle,
                         ))
                   ],
@@ -294,7 +298,12 @@ class _UserTariffsPageState extends State<UserTariffsPage>
                       child: Row(
                         children: [
                           Expanded(flex: 2, child: Text("Дата підключення:")),
-                          Expanded(flex: 3, child: Text(tariff.activationDate)),
+                          Expanded(
+                              flex: 3,
+                              child: Text(tariff.activationDate != null
+                                  ? DataModifier.getTimeAndDate(
+                                      tariff.activationDate)
+                                  : "")),
                         ],
                       ),
                     ),
@@ -306,7 +315,11 @@ class _UserTariffsPageState extends State<UserTariffsPage>
                         children: [
                           Expanded(flex: 2, child: Text("Дата відключення:")),
                           Expanded(
-                              flex: 3, child: Text(tariff.deactivationDate)),
+                              flex: 3,
+                              child: Text(tariff.deactivationDate != null
+                                  ? DataModifier.getTimeAndDate(
+                                      tariff.deactivationDate)
+                                  : "")),
                         ],
                       ),
                     ),

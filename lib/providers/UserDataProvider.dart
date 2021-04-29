@@ -270,8 +270,8 @@ class UserDataProvider {
   Future<UserModel> updateUser(int userId, String name, String surname) async {
     Map<String, String> query = {
       "userId": userId.toString(),
-      "newSurname": name,
-      "newName": surname
+      "newSurname": surname,
+      "newName": name
     };
     try {
       var response =

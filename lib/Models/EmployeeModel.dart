@@ -62,6 +62,7 @@ class Employee {
   "officeRef": 5
 }*/
 class EmployeeCreateModel {
+  int employeeId;
   String name;
   String surname;
   double salary;
@@ -69,10 +70,26 @@ class EmployeeCreateModel {
   int officeRef;
 
   EmployeeCreateModel(
-      {this.name, this.surname, this.salary, this.officeRef, this.postRef});
+      {this.name,
+      this.surname,
+      this.salary,
+      this.officeRef,
+      this.postRef,
+      this.employeeId});
 
   Map<String, dynamic> toJson() {
     return {
+      "name": name,
+      "surname": surname,
+      "salary": salary,
+      "officeRef": officeRef,
+      "postRef": postRef,
+    };
+  }
+
+  Map<String, dynamic> toJsonEdit() {
+    return {
+      "employeeId": employeeId,
       "name": name,
       "surname": surname,
       "salary": salary,

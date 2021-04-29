@@ -13,7 +13,6 @@ class TariffModel {
   String registrationDate;
   int regionRef;
   bool isActive;
-  String activationDate;
   UserTariffModel userTariffInfo;
   TariffModel(
       {this.tariffId,
@@ -25,7 +24,6 @@ class TariffModel {
       this.callPrice,
       this.pricePerPeriod,
       this.registrationDate,
-      this.activationDate,
       this.regionRef,
       this.isActive,
       this.smsPrice,

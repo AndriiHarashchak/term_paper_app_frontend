@@ -1,11 +1,11 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/userModel.dart';
 import 'package:term_paper_app_frontend/Models/user_service_model.dart';
 import 'package:term_paper_app_frontend/pages/activation_page.dart';
 import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 
 class UserServicesPage extends StatefulWidget {
   final UserModel user;
@@ -23,7 +23,6 @@ class _UserServicesPageState extends State<UserServicesPage>
   bool isDataLoaded = false;
   UserDataProvider _provider;
 
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   @override
   void initState() {
     super.initState();
@@ -48,7 +47,7 @@ class _UserServicesPageState extends State<UserServicesPage>
       length: tabsList.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Послуги користувача"),
+          title: Text("Послуги абонента"),
           bottom: PreferredSize(
             preferredSize: _tabBar.preferredSize,
             child: ColoredBox(
@@ -135,8 +134,8 @@ class _UserServicesPageState extends State<UserServicesPage>
                         ),
                         Expanded(
                           flex: 1,
-                          child: Text(formatter.format(
-                              DateTime.parse(services[index].activationDate))),
+                          child: Text(DataModifier.getTimeAndDate(
+                              services[index].activationDate)),
                         ),
                       ],
                     ),
@@ -155,8 +154,8 @@ class _UserServicesPageState extends State<UserServicesPage>
                         Expanded(
                           flex: 1,
                           child: Text(services[index].endDate != null
-                              ? formatter.format(
-                                  formatter.parse(services[index].endDate))
+                              ? DataModifier.getTimeAndDate(
+                                  services[index].endDate)
                               : ""),
                         ),
                       ],

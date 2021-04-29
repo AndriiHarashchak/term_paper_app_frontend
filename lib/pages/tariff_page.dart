@@ -2,6 +2,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/Models/tariff_model.dart';
 import 'package:term_paper_app_frontend/pages/tariffs_page.dart';
+import 'package:term_paper_app_frontend/providers/data_mapper.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class TariffPage extends StatefulWidget {
@@ -202,11 +203,12 @@ class _TariffPageState extends State<TariffPage> {
                   children: [
                     Expanded(flex: 4, child: Text("Дата рєстрації:")),
                     Expanded(
-                        flex: 4,
-                        child: Text(
-                          widget.tariff.registrationDate.toString(),
-                          style: textStyle,
-                        ))
+                      flex: 4,
+                      child: Text(
+                        DataModifier.getDate(widget.tariff.registrationDate),
+                        style: textStyle,
+                      ),
+                    )
                   ],
                 ),
               ),

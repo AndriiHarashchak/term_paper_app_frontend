@@ -13,18 +13,14 @@ class EditUserPage extends StatefulWidget {
 
 class _EditUserPageState extends State<EditUserPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-
-  //final TextEditingController userNameTextController = TextEditingController();
   String name;
-  //final TextEditingController userSurnameTextController =
-  //TextEditingController();
   String surname;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Редагування даних користувача"),
+        title: Text("Зміна даних абонента"),
       ),
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -34,10 +30,10 @@ class _EditUserPageState extends State<EditUserPage> {
             onWillPop: () async {
               return await confirm(context,
                   title: Text("Скасування"),
-                  textOK: Text("Відмінити редагування"),
+                  textOK: Text("Відмінити зміну"),
                   textCancel: Text("Залишитись"),
                   content: Text(
-                      "Ви впевнені, що хочете скаcувати редагування даних?")); //true if can be popped
+                      "Ви впевнені, що хочете скаcувати зміну даних?")); //true if can be popped
             },
             child: Card(
               child: Column(
@@ -48,9 +44,8 @@ class _EditUserPageState extends State<EditUserPage> {
                     child: TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          labelText: "Ім'я користувача",
-                          hintText: "Введіть ім'я користувача"),
-                      //controller: userNameTextController,
+                          labelText: "Ім'я абонента",
+                          hintText: "Введіть ім'я абонента"),
                       keyboardType: TextInputType.text,
                       initialValue: widget.user.name,
                       onChanged: (value) {
@@ -72,8 +67,7 @@ class _EditUserPageState extends State<EditUserPage> {
                       autocorrect: false,
                       decoration: InputDecoration(
                           labelText: "Прізвище",
-                          hintText: "Введіть прізвище користувача"),
-                      //controller: userSurnameTextController,
+                          hintText: "Введіть прізвище абонента"),
                       keyboardType: TextInputType.text,
                       initialValue: widget.user.surname,
                       onChanged: (value) {
@@ -94,15 +88,15 @@ class _EditUserPageState extends State<EditUserPage> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: Text("Створити послугу"),
+                        child: Text("Змінити дані абонента"),
                         onPressed: () async {
                           if (!await confirm(
                             context,
-                            textOK: Text("Зареєструвати"),
+                            textOK: Text("Змінити"),
                             textCancel: Text("Скасувати"),
-                            title: Text("Створення псолуги"),
+                            title: Text("Зміна даних"),
                             content: Text(
-                                "Ви впевнені, що хочете створити послугу?"),
+                                "Ви впевнені, що хочете змінити дані абонента?"),
                           )) {
                             return;
                           }
@@ -110,7 +104,7 @@ class _EditUserPageState extends State<EditUserPage> {
                           if (editedUser != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.redAccent,
-                                content: Text("Успішно відредаговано")));
+                                content: Text("Успішно змінено")));
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
                                     builder: (context) => UserPage(
@@ -119,8 +113,7 @@ class _EditUserPageState extends State<EditUserPage> {
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
-                              content: Text(
-                                  "Не вдалось відредагувати дані користувача"),
+                              content: Text("Не вдалось змінити дані абонента"),
                             ));
                           }
                         },

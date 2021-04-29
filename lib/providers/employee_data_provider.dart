@@ -44,4 +44,16 @@ class EmployeeDataProvider {
     }
     return null;
   }
+
+  Future<Employee> editEmployee(EmployeeCreateModel employeeToEdit) async {
+    try {
+      var requestBody = json.encode(employeeToEdit.toJsonEdit());
+      var response = await provider.putResponseToAPI(
+          endpoint: "api/employee", query: null, body: requestBody);
+      return Employee.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
 }

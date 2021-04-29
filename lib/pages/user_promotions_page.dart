@@ -47,7 +47,7 @@ class _UserPromotionsPageState extends State<UserPromotionsPage>
       length: tabsList.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Акції користувача"),
+          title: Text("Акції абонента"),
           bottom: PreferredSize(
             preferredSize: _tabBar.preferredSize,
             child: ColoredBox(
