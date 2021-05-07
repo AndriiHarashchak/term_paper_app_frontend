@@ -14,4 +14,12 @@ class PostModel {
       basicSalary: jsonData["BasicSalary"].toDouble(),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      "PostId": postId,
+      "PostName": postName,
+      "Description": description,
+      "BasicSalary": basicSalary
+    };
+  }
 }

@@ -9,6 +9,7 @@ import 'package:term_paper_app_frontend/pages/user_services_page.dart';
 import 'package:term_paper_app_frontend/pages/user_sms_history_page.dart';
 import 'package:term_paper_app_frontend/pages/user_tariffs_page.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:term_paper_app_frontend/providers/UserDataProvider.dart';
 
 class UserPage extends StatefulWidget {
   final UserModel user;
@@ -345,6 +346,38 @@ class _UserPageState extends State<UserPage> {
                               UserPaymentsPage(userId: widget.user.userId)))
                     },
                     child: Text("Історія платежів"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.5),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      () async {
+                        UserDataProvider().readReport(widget.user.userId);
+                      }()
+                    },
+                    child: Container(
+                        child: Row(
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(Icons.download_outlined),
+                            )),
+                        Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text("Завантажити звіт"),
+                          ),
+                        ),
+                        Expanded(flex: 1, child: Container())
+                      ],
+                    )),
                   ),
                 ),
               ),

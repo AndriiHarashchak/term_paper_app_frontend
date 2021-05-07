@@ -40,4 +40,13 @@ class ServiceModel {
       "activePeriod": activePeriod,
     };
   }
+
+  Map<String, dynamic> toJson2() {
+    return {
+      "serviceName": serviceName,
+      "conditions": conditions,
+      "price": price,
+      "activePeriod": activePeriod,
+    };
+  }
 }

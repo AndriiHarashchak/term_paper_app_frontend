@@ -205,9 +205,9 @@ class GeneralDataProvider {
 
   Future<ServiceModel> registerService(ServiceModel service) async {
     try {
-      var requestBody = json.encode(service.toJson());
+      var requestBody = json.encode(service.toJson2());
       var response = await _provider.postRequest(
-          endpoint: "api/basedata/services", body: requestBody);
+          endpoint: "api/basedata/services", body: requestBody, query: null);
       return ServiceModel.fromJson(response);
     } catch (e) {
       print(e.toString());
@@ -335,5 +335,89 @@ class GeneralDataProvider {
       print(e.toString());
       return null;
     }
+  }
+
+  Future<List<PostModel>> getPostsHistory() async {
+    try {
+      var response = await _provider.getDataFromAPI(
+          endpoint: "api/employee/posts/history", query: null);
+      List<PostModel> data = [];
+      (response as List).forEach((element) {
+        data.add(PostModel.fromJson(element));
+      });
+      return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<PostModel> registerPost(PostModel newPost) async {
+    try {
+      var requestBody = json.encode(newPost.toJson());
+      var response = await _provider.postRequest(
+          endpoint: "api/employee/posts", body: requestBody);
+      return PostModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<bool> deactivatePost(int postId) async {
+    Map<String, String> params = {
+      "postId": postId.toString(),
+    };
+    try {
+      await _provider.deleteResponceToAPI(
+          endpoint: "api/employee/posts", query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> addServicesToTariff(int serviceId, List<int> tariffIds) async {
+    try {
+      Map<String, String> params = {
+        "serviceId": serviceId.toString(),
+      };
+      var requestBody = json.encode(tariffIds);
+      await _provider.postRequest(
+          endpoint: "api/basedata/TariffService",
+          body: requestBody,
+          query: params);
+      return true;
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<PostModel> updatePost(PostModel newPost) async {
+    try {
+      var requestBody = json.encode(newPost.toJson());
+      var response = await _provider.putResponseToAPI(
+          endpoint: "api/epmloyee/posts", body: requestBody, query: null);
+      return PostModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<OfficeModel> registerOffice(String adress) async {
+    Map<String, String> params = {
+      "officeAdress": adress,
+    };
+    try {
+      var response = await _provider.postRequest(
+          endpoint: "api/employee/offices", query: params, body: null);
+      return OfficeModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
   }
 }

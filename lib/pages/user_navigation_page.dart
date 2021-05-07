@@ -30,7 +30,7 @@ class _UsernavigationpageState extends State<Usernavigationpage> {
                     MaterialPageRoute(
                         builder: (context) => SearchPage(
                               type: SearchType.user,
-                              title: "Пошук абонента",
+                              title: "абонента",
                             )),
                   );
                 },

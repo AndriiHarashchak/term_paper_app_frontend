@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:term_paper_app_frontend/pages/custom_app_drawer.dart';
 import 'package:term_paper_app_frontend/pages/employee_register_page.dart';
 import 'package:term_paper_app_frontend/pages/offices_page.dart';
+import 'package:term_paper_app_frontend/pages/posts_page.dart';
 import 'package:term_paper_app_frontend/pages/search_page.dart';
 import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 
@@ -28,7 +29,7 @@ class EmployeeNavigationPage extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => SearchPage(
                               type: SearchType.employee,
-                              title: "Пошук працівника",
+                              title: "працівника",
                             )),
                   );
                 },
@@ -81,6 +82,21 @@ class EmployeeNavigationPage extends StatelessWidget {
                             title: "Пошук користувача",
                           )),
                 ); */
+                },
+              ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 80,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                child: Text("Інформація про посади"),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PostsPage()),
+                  );
                 },
               ),
             ),

@@ -1,49 +1,39 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:term_paper_app_frontend/Models/service_model.dart';
-import 'package:term_paper_app_frontend/Models/tariff_model.dart';
+import 'package:term_paper_app_frontend/Models/post_model.dart';
+import 'package:term_paper_app_frontend/Models/region_model.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 import 'package:term_paper_app_frontend/pages/services_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
-enum OperationType { create, update }
-
-class ServiceRegistrationPage extends StatefulWidget {
+class PostRegistrationPage extends StatefulWidget {
   final OperationType type;
-  final ServiceModel service;
-  ServiceRegistrationPage({Key key, @required this.type, this.service})
+  final PostModel post;
+  PostRegistrationPage({Key key, @required this.type, this.post})
       : super(key: key);
   @override
-  _ServiceRegistrationPageState createState() =>
-      _ServiceRegistrationPageState();
+  _PostRegistrationPageState createState() => _PostRegistrationPageState();
 }
 
-class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
+class _PostRegistrationPageState extends State<PostRegistrationPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  String conditions;
-  String _serviceName;
-  String _price;
-  String _activePeriod;
+  String decription;
+  String _postName;
+  String _basicSalary;
 
-  List<TariffModel> tariffs;
-  List<TariffModel> _selectedTariffs;
-  //List<RegionModel> regions;
+  List<RegionModel> regions;
   GeneralDataProvider _gdprovider;
   @override
   void initState() {
     super.initState();
     if (widget.type == OperationType.update) {
-      conditions = widget.service.conditions;
-      _serviceName = widget.service.serviceName;
-      _price = widget.service.price.toString();
-      _activePeriod = widget.service.activePeriod.toString();
+      decription = widget.post.description;
+      _postName = widget.post.postName;
+      _basicSalary = widget.post.basicSalary.toString();
     }
 
     _gdprovider = GeneralDataProvider();
-    tariffs = [];
-    loadTariffs();
   }
 
   @override
@@ -51,8 +41,8 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.type == OperationType.create
-            ? "Створення послуги"
-            : "Редагування послуги"),
+            ? "Створення посади"
+            : "Редагування посади"),
       ),
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -71,8 +61,8 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                       : "Відмінити редагування"),
                   textCancel: Text("Залишитись"),
                   content: Text(widget.type == OperationType.create
-                      ? "Ви впевнені, що хочете скаcувати створення нової послуги?"
-                      : "Ви впевнені, що хочете скаcувати редагування послуги?")); //true if can be popped
+                      ? "Ви впевнені, що хочете скаcувати створення нової посади?"
+                      : "Ви впевнені, що хочете скаcувати редагування посади?")); //true if can be popped
             },
             child: Card(
               child: Column(
@@ -83,14 +73,14 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                     child: TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          labelText: "Назва послуги",
-                          hintText: "Введіть назву послуги"),
+                          labelText: "Назва посади",
+                          hintText: "Введіть назву посади"),
                       initialValue: widget.type == OperationType.create
                           ? ""
-                          : widget.service.serviceName,
+                          : widget.post.postName,
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
-                        _serviceName = value;
+                        _postName = value;
                       },
                       validator: (text) {
                         if (text.isEmpty) return "Не може бути пустим";
@@ -107,14 +97,13 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                     child: TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          labelText: "Умови",
-                          hintText: "Введіть умови послуги"),
+                          labelText: "Опис", hintText: "Введіть опис посади"),
                       initialValue: widget.type == OperationType.create
                           ? ""
-                          : widget.service.conditions,
+                          : widget.post.description,
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
-                        conditions = value;
+                        decription = value;
                       },
                       validator: validate,
                     ),
@@ -125,13 +114,14 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                     child: TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          labelText: "Ціна", hintText: "Введіть ціну"),
+                          labelText: "Базова заробітня плата",
+                          hintText: "Введіть базову заробітню плату"),
                       initialValue: widget.type == OperationType.create
                           ? ""
-                          : widget.service.price.toString(),
+                          : widget.post.basicSalary.toString(),
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        _price = value;
+                        _basicSalary = value;
                       },
                       validator: (text) {
                         if (text.isEmpty) {
@@ -141,48 +131,9 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                           return "Неправильно введене значення";
                         }
                         double value = double.parse(text);
-                        if (value < 0)
-                          return "Значення не може бути менше нуля";
+                        if (value < 5000)
+                          return "Значення не може бути менше 5000";
                         return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                    child: TextFormField(
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                          labelText: "Активний період (діб)",
-                          hintText: "Введіть термін дії послуги"),
-                      initialValue: widget.type == OperationType.create
-                          ? ""
-                          : widget.service.activePeriod.toString(),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        _activePeriod = value;
-                      },
-                      validator: (text) {
-                        if (text.isEmpty) return "Поле не може бути пустим";
-
-                        if (int.tryParse(text) == null)
-                          return "Значення повинне бути натуральним числом";
-                        int value = int.parse(text);
-                        if (value < 0) return "Число менше нуля!";
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: MultiSelectDialogField(
-                      title: Text("Виберіть тарифи для послуги"),
-                      items: tariffs
-                          .map((e) => MultiSelectItem(e, e.tariffName))
-                          .toList(),
-                      listType: MultiSelectListType.LIST,
-                      onConfirm: (values) {
-                        _selectedTariffs = values;
                       },
                     ),
                   ),
@@ -193,8 +144,8 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         child: Text(widget.type == OperationType.create
-                            ? "Створити послугу"
-                            : "Редагувати послугу"),
+                            ? "Створити посаду"
+                            : "Редагувати посаду"),
                         onPressed: () async {
                           String title = widget.type == OperationType.create
                               ? "Зареєструвати"
@@ -207,15 +158,15 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                                 ? "Реєстрація послуги"
                                 : "Редагування послуги"),
                             content: Text(
-                                "Ви впевнені, що хочете ${title.toLowerCase()} послугу?"),
+                                "Ви впевнені, що хочете ${title.toLowerCase()} посаду?"),
                           )) {
                             return;
                           }
-                          ServiceModel newService =
+                          PostModel newPost =
                               widget.type == OperationType.create
-                                  ? await registerService()
-                                  : await editService();
-                          if (newService != null) {
+                                  ? await registerPost()
+                                  : await editPost();
+                          if (newPost != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.redAccent,
                                 content: Text(
@@ -229,8 +180,8 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.redAccent,
                               content: Text(widget.type == OperationType.create
-                                  ? "Не вдалось створити послугу"
-                                  : "Не вдалось редагувати послугу"),
+                                  ? "Не вдалось створити посаду"
+                                  : "Не вдалось редагувати посаду"),
                             ));
                           }
                         },
@@ -246,20 +197,17 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
     );
   }
 
-  Future<ServiceModel> registerService() async {
+  Future<PostModel> registerPost() async {
     final FormState form = _formKey.currentState;
     if (!form.validate()) {
       return null;
     } else {
-      ServiceModel service = ServiceModel(
-          serviceName: _serviceName,
-          conditions: conditions,
-          price: double.parse(_price),
-          activePeriod: int.parse(_activePeriod));
-      var response = await _gdprovider.registerService(service);
-      if (response != null)
-        await _gdprovider.addServicesToTariff(response.serviceId,
-            _selectedTariffs.map((e) => e.tariffId).toList());
+      PostModel post = PostModel(
+        postName: _postName,
+        description: decription,
+        basicSalary: double.parse(_basicSalary),
+      );
+      var response = await _gdprovider.registerPost(post);
       return response;
     }
   }
@@ -269,23 +217,15 @@ class _ServiceRegistrationPageState extends State<ServiceRegistrationPage> {
     return "Поле не може бути пустим";
   }
 
-  Future<ServiceModel> editService() async {
+  Future<PostModel> editPost() async {
     final FormState form = _formKey.currentState;
     if (!form.validate()) return null;
-    ServiceModel newService = ServiceModel(
-        serviceId: widget.service.serviceId,
-        serviceName: _serviceName,
-        conditions: conditions,
-        price: double.parse(_price),
-        activePeriod: int.parse(_activePeriod));
-    return await _gdprovider.updateService(newService);
-  }
-
-  void loadTariffs() async {
-    var tariffsData = await _gdprovider.getTariffs();
-    if (tariffsData != null)
-      setState(() {
-        tariffs = tariffsData;
-      });
+    PostModel editedPost = PostModel(
+      postId: widget.post.postId,
+      postName: _postName,
+      description: decription,
+      basicSalary: double.parse(_basicSalary),
+    );
+    return await _gdprovider.updatePost(editedPost);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:term_paper_app_frontend/Models/office_model.dart';
+import 'package:term_paper_app_frontend/pages/office_create_edit_page.dart';
+import 'package:term_paper_app_frontend/pages/service_create_page.dart';
 import 'package:term_paper_app_frontend/providers/general_data_provider.dart';
 
 class OfficesPage extends StatefulWidget {
@@ -69,12 +71,10 @@ class _OfficesPageState extends State<OfficesPage> {
                   child: ElevatedButton(
                     child: Text("Зареєструвати офіс"),
                     onPressed: () {
-                      /* Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ActivationPage(
-                            userId: widget.user.userId,
-                            tariffId: widget.user.tariffId,
-                            type: Type.service,
-                          ))); */
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => OfficeCreatePage(
+                                type: OperationType.create,
+                              )));
                     },
                   ),
                 ),
