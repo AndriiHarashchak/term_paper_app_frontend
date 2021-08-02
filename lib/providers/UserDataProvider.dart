@@ -11,7 +11,6 @@ import 'package:term_paper_app_frontend/Models/user_promotion_model.dart';
 import 'package:term_paper_app_frontend/Models/user_service_model.dart';
 import 'package:term_paper_app_frontend/Models/user_sms_model.dart';
 import 'package:term_paper_app_frontend/providers/ApiDataReceiver.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 
 class UserDataProvider {
   final ApiProvider _provider;
@@ -293,6 +292,7 @@ class UserDataProvider {
       return true;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 }
